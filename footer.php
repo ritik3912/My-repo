@@ -27,10 +27,10 @@ $tn_email     = get_theme_mod( 'tn_contact_email', '' );
 							<a href="<?php echo esc_url( $tn_instagram ); ?>" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><?php echo tn_icon( 'camera' ); ?></a>
 						<?php endif; ?>
 						<?php if ( $tn_youtube ) : ?>
-							<a href="<?php echo esc_url( $tn_youtube ); ?>" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><?php echo tn_icon( 'arrow' ); ?></a>
+							<a href="<?php echo esc_url( $tn_youtube ); ?>" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><?php echo tn_icon( 'play' ); ?></a>
 						<?php endif; ?>
 						<?php if ( $tn_email ) : ?>
-							<a href="mailto:<?php echo esc_attr( $tn_email ); ?>" aria-label="Email"><?php echo tn_icon( 'mountain' ); ?></a>
+							<a href="mailto:<?php echo esc_attr( $tn_email ); ?>" aria-label="Email"><?php echo tn_icon( 'mail' ); ?></a>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
