@@ -1,8 +1,10 @@
 <?php
 /**
- * Editorial photo journal, grouped by day, rendered as a masonry grid of
- * real uploaded photos (Photo Journal meta box → Media Library). Each
- * photo opens full-size in the lightbox handled by assets/js/main.js.
+ * Editorial photo journal, grouped by day, rendered as an even-height grid
+ * of real uploaded photos (Photo Journal meta box → Media Library). Every
+ * tile shares the same aspect ratio so a row of photos lines up evenly
+ * regardless of the source photos' own dimensions. Each photo opens
+ * full-size in the lightbox handled by assets/js/main.js.
  *
  * @package Trail_Notes
  */
@@ -13,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $post_id = isset( $args['post_id'] ) ? (int) $args['post_id'] : get_the_ID();
 $groups  = tn_get_json_meta( $post_id, 'tn_photo_gallery' );
-$ratios  = array( '4-3', '3-4', '1-1', '16-9' );
+$ratio   = '4-3';
 ?>
 <?php if ( $groups ) : ?>
 	<?php foreach ( $groups as $group ) : ?>
@@ -29,14 +31,13 @@ $ratios  = array( '4-3', '3-4', '1-1', '16-9' );
 				<h4><?php echo esc_html( $label ); ?></h4>
 			<?php endif; ?>
 			<div class="masonry">
-				<?php foreach ( $ids as $i => $attachment_id ) : ?>
+				<?php foreach ( $ids as $attachment_id ) : ?>
 					<?php
 					$full_url = wp_get_attachment_image_url( $attachment_id, 'full' );
 					$alt      = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 					if ( ! $alt ) {
 						$alt = $label ? $label : get_the_title( $post_id );
 					}
-					$ratio = $ratios[ $i % count( $ratios ) ];
 					?>
 					<a
 						class="placeholder-img has-photo ratio-<?php echo esc_attr( $ratio ); ?> lightbox-trigger"

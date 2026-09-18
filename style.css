@@ -1403,7 +1403,7 @@ h3 {
   }
 }
 
-/* ---------- Photo gallery (masonry via columns) ---------- */
+/* ---------- Photo gallery (even-height grid) ---------- */
 .photo-journal-group {
   margin-bottom: 2.5rem;
 }
@@ -1414,25 +1414,26 @@ h3 {
 }
 
 .masonry {
-  column-count: 1;
-  column-gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
 .masonry .placeholder-img {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   border-radius: var(--radius-md);
-  break-inside: avoid;
+  height: 100%;
 }
 
 @media (min-width: 620px) {
   .masonry {
-    column-count: 2;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 980px) {
   .masonry {
-    column-count: 3;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
