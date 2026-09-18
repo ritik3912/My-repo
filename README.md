@@ -22,30 +22,30 @@ A custom, editorial WordPress theme for a personal Himalayan trekking journal: r
 
 ## Adding or editing a trek
 
-Go to **Treks → Add New**. There's no repeater-field UI — every repeating section (route, itinerary, cost, packing, seasons, wish-i-knew, photo groups) is a plain textarea where **each line is one row**, and columns within a row are separated by `|`. This keeps the theme free of extra plugin dependencies while still being fully data-driven — add a new trek and it automatically appears in the homepage showcase, the `/treks/` archive and the Trek Finder filters with zero template changes.
+Go to **Treks → Add New**. Every repeating section (route, itinerary, cost, packing, seasons, wish-i-knew) is an editable **table** — click **+ Add row** to add a row, click **✕** to remove one. There's still no page-builder/ACF dependency: under the hood each table is backed by a plain post-meta field, kept in sync as you type by `assets/js/admin-repeater.js`. If you ever prefer typing raw text (e.g. pasting several rows at once), click **Edit as plain text** on any table to switch to the old one-line-per-row view — either way works, and switching back re-reads whatever you typed.
 
-| Box | Format | Example |
+| Box | Columns | Example row |
 |---|---|---|
-| Route steps | `Place \| What happens here` | `Delhi \| Overnight bus to Rishikesh, ~7-8 hrs` |
-| Route notes | one tip per line | `Shared cabs fill up early — start by 7 AM` |
-| Itinerary | `Title \| Distance \| Walking Duration \| Elevation Gain \| Difficulty \| Highlights \| Personal Notes` | `Base to Camp 1 \| 6 km \| 4–5 hrs \| +800 m \| Moderate \| Oak forest, first ridge view \| [Add your notes]` |
-| Cost items | `Category \| Amount` | `Delhi → Base Village \| ₹1,200` |
-| Packing | `Category: item one, item two` | `Footwear: Trekking shoes, extra socks` |
-| Seasons | `Season \| Conditions \| Trail Condition \| Visibility \| Snow Possibility \| What to Carry` | one line per season, up to 5 |
-| Wish I Knew | `Title \| Description` | `Network \| Disappears after the base village` |
-| Photo groups | `Label \| number of placeholder tiles` | `Summit Day \| 6` |
+| Route steps | Place, What happens here | `Delhi` / `Overnight bus to Rishikesh, ~7-8 hrs` |
+| Route notes | Tip | `Shared cabs fill up early — start by 7 AM` |
+| Itinerary | Title, Distance, Walking Duration, Elevation Gain, Difficulty, Highlights, Personal Notes | `Base to Camp 1` / `6 km` / `4–5 hrs` / `+800 m` / `Moderate` / `Oak forest, first ridge view` / `[your notes]` |
+| Cost items | Category, Amount | `Delhi → Base Village` / `₹1,200` |
+| Packing | Category, Items (comma-separated) | `Footwear` / `Trekking shoes, extra socks` |
+| Seasons | Season, Conditions, Trail Condition, Visibility, Snow Possibility, What to Carry | up to 5 rows |
+| Wish I Knew | Title, Description | `Network` / `Disappears after the base village` |
 
 - **Main content editor** = the "My Experience" section, written in first person. Tick **"This trek has a real, personally-written experience"** in the Quick Info box to show it — otherwise the page shows an editable placeholder instead of pretending everyone's experience is the same.
 - **Region / Difficulty / Duration / Experience Level** are set in the taxonomy boxes on the right-hand side of the editor (like Categories). Add new terms there any time — the Trek Finder filters update automatically.
 - **Excerpt** = the short one/two-line description shown on trek cards and in the hero.
 - **Featured Image** = the large hero photo.
 
-## Adding real photos later
-
-Every image on the site is a placeholder tile (a labelled gradient box) until a real photo is attached, so nothing ever looks broken. To replace one:
+## Adding photos and videos
 
 - **Hero / card images**: set the post's Featured Image.
-- **Photo Journal galleries**: currently rendered as placeholder counts (`template-parts/photo-gallery.php`). Swap in real photos by editing that file to loop over an actual gallery/attachment list instead of a placeholder count once photos are ready — the group structure (Day 1, Summit Day, etc.) stays the same.
+- **Photo Journal**: the **Photo Journal** meta box uploads real photos straight from the WordPress Media Library. Click **+ Add photo group** (e.g. "Day 1", "Summit Day"), then **Add Photos** on that group to open the media picker — multi-select works. Remove a photo with the **✕** on its thumbnail, or a whole group with **Remove group**. Photos render as a real masonry gallery on the trek page and open full-size in a lightbox on click.
+- **Trek Videos**: the **Trek Videos** meta box (below Photo Journal) takes either a YouTube/Vimeo link or a video file uploaded from the Media Library. Click **+ Add video**, choose the type, then paste the URL or click **Choose video file**. Videos render as a responsive embed/player on the trek page under "Trail Videos".
+
+Every image and video field only appears once you've added a real photo or trek — until then the site shows a clearly-labelled placeholder tile instead of a broken image.
 
 ## Plan a Trek form
 
@@ -69,8 +69,11 @@ archive-trek.php       /treks/ — listing + Trek Finder
 single-trek.php         Full trek detail page
 page-about.php / page-travel-tips.php / page-plan-a-trek.php   Template Name pages
 page.php / index.php / single.php / 404.php   Fallback templates
-template-parts/*.php   Reusable, data-driven components
-assets/js/main.js      Sticky header, mobile menu, scroll reveal, Trek Finder filtering
+template-parts/*.php   Reusable, data-driven components (includes photo-gallery.php + video-gallery.php)
+assets/js/main.js            Sticky header, mobile menu, scroll reveal, Trek Finder filtering, photo lightbox
+assets/js/admin-repeater.js  Turns the Trek meta boxes' pipe/line fields into editable tables
+assets/js/admin-media.js     Media Library uploader for Photo Journal groups + Trek Videos
+assets/css/admin-trek.css    Styling for the two admin scripts above (Trek edit screen only)
 ```
 
 ## Notes on content accuracy

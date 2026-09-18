@@ -56,6 +56,25 @@ function tn_assets() {
 add_action( 'wp_enqueue_scripts', 'tn_assets' );
 
 /**
+ * Media uploader + repeater-table admin assets, loaded only on the Trek
+ * add/edit screen — this is what lets "Photo Journal" and "Trek Videos"
+ * open the real Media Library instead of typing a placeholder count, and
+ * turns the pipe-delimited fields into editable tables.
+ */
+function tn_admin_assets( $hook ) {
+	$screen = get_current_screen();
+	if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) || ! $screen || 'trek' !== $screen->post_type ) {
+		return;
+	}
+
+	wp_enqueue_media();
+	wp_enqueue_style( 'trail-notes-admin-trek', TN_URI . '/assets/css/admin-trek.css', array(), TN_VERSION );
+	wp_enqueue_script( 'trail-notes-admin-repeater', TN_URI . '/assets/js/admin-repeater.js', array(), TN_VERSION, true );
+	wp_enqueue_script( 'trail-notes-admin-media', TN_URI . '/assets/js/admin-media.js', array( 'jquery' ), TN_VERSION, true );
+}
+add_action( 'admin_enqueue_scripts', 'tn_admin_assets' );
+
+/**
  * Widget areas (kept minimal — footer is hand-built from theme mods/menus).
  */
 function tn_widgets_init() {

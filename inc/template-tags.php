@@ -65,6 +65,67 @@ function tn_parse_categorized_list( $text ) {
 }
 
 /**
+ * Read a JSON-encoded post meta value (photo galleries, videos) back into
+ * an array, tolerating missing/corrupt data instead of fataling.
+ */
+function tn_get_json_meta( $post_id, $key, $default = array() ) {
+	$raw = tn_meta( $post_id, $key );
+	if ( '' === $raw ) {
+		return $default;
+	}
+	$decoded = json_decode( $raw, true );
+	return is_array( $decoded ) ? $decoded : $default;
+}
+
+/**
+ * Turn a video entry (from the Trek Videos meta box) into embeddable HTML:
+ * a responsive YouTube/Vimeo/oEmbed iframe for "embed" entries, or a plain
+ * <video> tag for a file uploaded to the Media Library.
+ */
+function tn_video_embed_html( $entry ) {
+	if ( empty( $entry['value'] ) ) {
+		return '';
+	}
+	$label = isset( $entry['label'] ) ? $entry['label'] : '';
+
+	if ( 'upload' === ( $entry['type'] ?? '' ) ) {
+		$url = wp_get_attachment_url( (int) $entry['value'] );
+		if ( ! $url ) {
+			return '';
+		}
+		return sprintf(
+			'<video controls preload="metadata" src="%s">%s</video>',
+			esc_url( $url ),
+			esc_html__( 'Your browser does not support embedded video.', 'trail-notes' )
+		);
+	}
+
+	$url = esc_url_raw( $entry['value'] );
+	if ( ! $url ) {
+		return '';
+	}
+
+	if ( preg_match( '~(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([A-Za-z0-9_-]{6,})~', $url, $m ) ) {
+		return sprintf(
+			'<iframe src="https://www.youtube-nocookie.com/embed/%1$s" title="%2$s" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+			esc_attr( $m[1] ),
+			esc_attr( $label )
+		);
+	}
+
+	if ( preg_match( '~vimeo\.com/(?:video/)?(\d+)~', $url, $m ) ) {
+		return sprintf(
+			'<iframe src="https://player.vimeo.com/video/%1$s" title="%2$s" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
+			esc_attr( $m[1] ),
+			esc_attr( $label )
+		);
+	}
+
+	$embed = wp_oembed_get( $url );
+	return $embed ? $embed : '';
+}
+
+/**
  * A single small inline SVG sprite so we never depend on an icon font or
  * external request.
  */
@@ -83,6 +144,7 @@ function tn_icon( $name, $class = '' ) {
 		'shield'   => '<path d="M12 3 4 6v6c0 5 3.5 7.7 8 9 4.5-1.3 8-4 8-9V6l-8-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
 		'play'     => '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor"/>',
 		'mail'     => '<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+		'calendar' => '<rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
 	);
 	if ( ! isset( $icons[ $name ] ) ) {
 		return '';

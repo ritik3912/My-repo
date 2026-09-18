@@ -81,6 +81,48 @@
 		}
 	}
 
+	/* ---------- Photo journal lightbox ---------- */
+	var lightboxTriggers = document.querySelectorAll( '[data-lightbox]' );
+	if ( lightboxTriggers.length ) {
+		var overlay = document.createElement( 'div' );
+		overlay.className = 'tn-lightbox';
+		overlay.innerHTML = '<button type="button" class="tn-lightbox-close" aria-label="Close">&times;</button><img alt="">';
+		document.body.appendChild( overlay );
+
+		var overlayImg = overlay.querySelector( 'img' );
+		var closeBtn = overlay.querySelector( '.tn-lightbox-close' );
+
+		function openLightbox( trigger ) {
+			overlayImg.src = trigger.getAttribute( 'href' );
+			overlayImg.alt = trigger.getAttribute( 'aria-label' ) || '';
+			overlay.classList.add( 'is-open' );
+		}
+
+		function closeLightbox() {
+			overlay.classList.remove( 'is-open' );
+			overlayImg.src = '';
+		}
+
+		lightboxTriggers.forEach( function ( trigger ) {
+			trigger.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				openLightbox( trigger );
+			} );
+		} );
+
+		closeBtn.addEventListener( 'click', closeLightbox );
+		overlay.addEventListener( 'click', function ( e ) {
+			if ( e.target === overlay ) {
+				closeLightbox();
+			}
+		} );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( 'Escape' === e.key ) {
+				closeLightbox();
+			}
+		} );
+	}
+
 	/* ---------- Trek Finder ---------- */
 	var finder = document.querySelector( '[data-trek-finder]' );
 	if ( finder ) {

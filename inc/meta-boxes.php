@@ -27,6 +27,7 @@ function tn_add_meta_boxes() {
 	add_meta_box( 'tn_wish', __( 'Things I Wish I Knew', 'trail-notes' ), 'tn_render_wish_box', 'trek', 'normal' );
 	add_meta_box( 'tn_suitability', __( 'Is This Trek For You?', 'trail-notes' ), 'tn_render_suitability_box', 'trek', 'normal' );
 	add_meta_box( 'tn_photos', __( 'Photo Journal', 'trail-notes' ), 'tn_render_photos_box', 'trek', 'normal' );
+	add_meta_box( 'tn_videos', __( 'Trek Videos', 'trail-notes' ), 'tn_render_video_box', 'trek', 'normal' );
 	add_meta_box( 'tn_seo', __( 'SEO', 'trail-notes' ), 'tn_render_seo_box', 'trek', 'side' );
 }
 add_action( 'add_meta_boxes', 'tn_add_meta_boxes' );
@@ -61,6 +62,48 @@ function tn_meta_nonce_field() {
 	wp_nonce_field( 'tn_save_trek_meta', 'tn_trek_meta_nonce' );
 }
 
+/**
+ * A repeating-row TABLE for the fields that used to be "one line per row,
+ * columns separated by |" plain text (route steps, itinerary, cost items,
+ * seasons, wish-i-knew, packing). JS (assets/js/admin-repeater.js) turns
+ * this into add/remove-row table editing and keeps the underlying
+ * textarea — still the field that actually gets saved — in sync on every
+ * keystroke, so tn_save_trek_meta() and the tn_parse_*() template helpers
+ * need no changes. An "Edit as plain text" toggle is kept as a fallback
+ * for bulk edits or if JS is unavailable.
+ *
+ * @param string $format 'pipe' (default), 'lines' (single column, one
+ *                        item per line), or 'packing' ("Category: a, b").
+ */
+function tn_field_table( $key, $post_id, $label, $help, $columns, $format = 'pipe' ) {
+	$value = tn_meta( $post_id, $key );
+	printf(
+		'<div class="tn-field-label"><label for="%1$s"><strong>%2$s</strong></label>%3$s</div>',
+		esc_attr( $key ),
+		esc_html( $label ),
+		$help ? '<br><span style="color:#666;font-size:12px;">' . $help . '</span>' : ''
+	);
+	?>
+	<div class="tn-repeater"
+		data-repeater-field="<?php echo esc_attr( $key ); ?>"
+		data-repeater-format="<?php echo esc_attr( $format ); ?>"
+		data-columns="<?php echo esc_attr( wp_json_encode( array_values( $columns ) ) ); ?>"
+		data-label-raw="<?php esc_attr_e( 'Edit as plain text', 'trail-notes' ); ?>"
+		data-label-table="<?php esc_attr_e( 'Edit as table', 'trail-notes' ); ?>"
+	>
+		<table class="tn-repeater-table">
+			<thead><tr></tr></thead>
+			<tbody></tbody>
+		</table>
+		<p>
+			<button type="button" class="button tn-repeater-add"><?php esc_html_e( '+ Add row', 'trail-notes' ); ?></button>
+			<button type="button" class="button-link tn-repeater-toggle-raw" style="margin-left:10px;"><?php esc_html_e( 'Edit as plain text', 'trail-notes' ); ?></button>
+		</p>
+		<textarea id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key ); ?>" class="tn-repeater-raw" rows="4" style="width:100%;display:none;font-family:monospace;"><?php echo esc_textarea( $value ); ?></textarea>
+	</div>
+	<?php
+}
+
 function tn_render_quick_info_box( $post ) {
 	tn_meta_nonce_field();
 	echo '<p style="color:#666;">' . esc_html__( 'Region, Difficulty, Duration and Experience Level are set in the boxes on the right (they power the Trek Finder filters). Everything below fills the Quick Info grid on the trek page.', 'trail-notes' ) . '</p>';
@@ -81,78 +124,96 @@ function tn_render_quick_info_box( $post ) {
 }
 
 function tn_render_route_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_route_steps',
 		$post->ID,
-		__( 'Route steps — one per line: Place | What happens here', 'trail-notes' ),
-		'Example: <code>Delhi | Overnight Volvo bus to Rishikesh, approx 7–8 hours</code>',
-		6
+		__( 'Route steps', 'trail-notes' ),
+		__( 'One row per leg of the journey — Delhi → transit city → base village → trek start.', 'trail-notes' ),
+		array( __( 'Place', 'trail-notes' ), __( 'What happens here', 'trail-notes' ) )
 	);
-	tn_field_textarea(
+	tn_field_table(
 		'tn_route_notes',
 		$post->ID,
-		__( 'Important transport tips — one per line', 'trail-notes' ),
-		'Example: <code>Shared cabs from the base village fill up early — start by 7 AM if you can.</code>',
-		4
+		__( 'Important transport tips', 'trail-notes' ),
+		'',
+		array( __( 'Tip', 'trail-notes' ) ),
+		'lines'
 	);
 }
 
 function tn_render_itinerary_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_itinerary',
 		$post->ID,
-		__( 'One line per day: Title | Distance | Walking Duration | Elevation Gain | Difficulty | Highlights | Personal Notes', 'trail-notes' ),
-		'Example: <code>Base to Camp 1 | 6 km | 4–5 hrs | +800 m | Moderate | Dense oak forest, first clear ridge view | [Add your notes for this day]</code>',
-		6
+		__( 'Day-by-day itinerary', 'trail-notes' ),
+		__( 'One row per day of the trek.', 'trail-notes' ),
+		array(
+			__( 'Title', 'trail-notes' ),
+			__( 'Distance', 'trail-notes' ),
+			__( 'Walking Duration', 'trail-notes' ),
+			__( 'Elevation Gain', 'trail-notes' ),
+			__( 'Difficulty', 'trail-notes' ),
+			__( 'Highlights', 'trail-notes' ),
+			__( 'Personal Notes', 'trail-notes' ),
+		)
 	);
 }
 
 function tn_render_cost_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_cost_items',
 		$post->ID,
-		__( 'One line per category: Category | Amount', 'trail-notes' ),
-		'Example: <code>Delhi → Base Village | ₹1,200</code>',
-		6
+		__( 'Cost items', 'trail-notes' ),
+		'',
+		array( __( 'Category', 'trail-notes' ), __( 'Amount', 'trail-notes' ) )
 	);
 	tn_field_text( 'tn_cost_total', $post->ID, __( 'Estimated Total (per person)', 'trail-notes' ), 'e.g. ₹5,500 approx.' );
 	tn_field_textarea( 'tn_cost_note', $post->ID, __( 'Note about this budget', 'trail-notes' ), 'This is shown as a disclaimer under the table.', 2 );
 }
 
 function tn_render_packing_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_packing',
 		$post->ID,
-		__( 'One line per category: Category: item one, item two, item three', 'trail-notes' ),
-		'Example: <code>Footwear: Trekking shoes, extra socks, camp slippers</code>',
-		6
+		__( 'Packing categories', 'trail-notes' ),
+		__( 'Items within a category are comma-separated, e.g. Trekking shoes, extra socks, camp slippers.', 'trail-notes' ),
+		array( __( 'Category', 'trail-notes' ), __( 'Items (comma-separated)', 'trail-notes' ) ),
+		'packing'
 	);
-	tn_field_textarea(
+	tn_field_table(
 		'tn_change_next_time',
 		$post->ID,
-		__( '"What I Would Change Next Time" — one item per line', 'trail-notes' ),
+		__( '"What I Would Change Next Time"', 'trail-notes' ),
 		'',
-		4
+		array( __( 'Item', 'trail-notes' ) ),
+		'lines'
 	);
 }
 
 function tn_render_seasons_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_seasons',
 		$post->ID,
-		__( 'One line per season: Season | Typical Conditions | Trail Condition | Visibility | Snow Possibility | What to Carry', 'trail-notes' ),
-		'Fill up to 5 lines (Spring, Summer, Monsoon, Autumn, Winter). Example: <code>Winter | Very cold, sub-zero at higher camps | Likely snow-covered, needs microspikes | Often clear but can change fast | High above [altitude] | Down jacket, thermals, gaiters</code>',
-		7
+		__( 'Seasonal guide', 'trail-notes' ),
+		__( 'Fill up to 5 rows (Spring, Summer, Monsoon, Autumn, Winter).', 'trail-notes' ),
+		array(
+			__( 'Season', 'trail-notes' ),
+			__( 'Typical Conditions', 'trail-notes' ),
+			__( 'Trail Condition', 'trail-notes' ),
+			__( 'Visibility', 'trail-notes' ),
+			__( 'Snow Possibility', 'trail-notes' ),
+			__( 'What to Carry', 'trail-notes' ),
+		)
 	);
 }
 
 function tn_render_wish_box( $post ) {
-	tn_field_textarea(
+	tn_field_table(
 		'tn_wish_i_knew',
 		$post->ID,
-		__( 'One line per card: Title | Description', 'trail-notes' ),
-		'Example: <code>Network | Mobile network disappears after the base village — inform people before you leave.</code>',
-		8
+		__( 'Things I wish I knew', 'trail-notes' ),
+		'',
+		array( __( 'Title', 'trail-notes' ), __( 'Description', 'trail-notes' ) )
 	);
 }
 
@@ -167,14 +228,38 @@ function tn_render_suitability_box( $post ) {
 	tn_field_textarea( 'tn_suitability_description', $post->ID, __( 'Practical description (no medical advice)', 'trail-notes' ), 'e.g. You should be comfortable walking continuously for 4–5 hours with a daypack.', 3 );
 }
 
+/**
+ * Real Media Library uploads, grouped (Day 1, Summit Day, ...), instead of
+ * the old placeholder-count textarea. assets/js/admin-media.js drives the
+ * "Add photo group" / "Add Photos" buttons and keeps the hidden textarea
+ * in sync as JSON: [{ "label": "Day 1", "ids": [12, 13] }, ...].
+ */
 function tn_render_photos_box( $post ) {
-	tn_field_textarea(
-		'tn_photo_groups',
-		$post->ID,
-		__( 'One line per gallery group: Label | number of placeholder photos', 'trail-notes' ),
-		'Example: <code>Day 1 | 4</code> then <code>Summit Day | 6</code>. Replace individual placeholders with real photos later by editing template-parts/photo-gallery.php.',
-		5
-	);
+	$value = tn_meta( $post->ID, 'tn_photo_gallery', '[]' );
+	echo '<p style="color:#666;">' . esc_html__( 'Group your real photos the way you\'d tell the story — e.g. "Day 1", "Summit Day" — then add photos to each group from the Media Library.', 'trail-notes' ) . '</p>';
+	?>
+	<div class="tn-photo-gallery-field">
+		<div class="tn-photo-groups"></div>
+		<p><button type="button" class="button tn-add-group"><?php esc_html_e( '+ Add photo group', 'trail-notes' ); ?></button></p>
+		<textarea id="tn_photo_gallery" name="tn_photo_gallery" class="tn-media-json" rows="3"><?php echo esc_textarea( $value ); ?></textarea>
+	</div>
+	<?php
+}
+
+/**
+ * Real video uploads or YouTube/Vimeo links, same JSON-in-a-hidden-field
+ * pattern as the photo gallery above.
+ */
+function tn_render_video_box( $post ) {
+	$value = tn_meta( $post->ID, 'tn_videos', '[]' );
+	echo '<p style="color:#666;">' . esc_html__( 'Paste a YouTube or Vimeo link, or upload a video file straight from the Media Library.', 'trail-notes' ) . '</p>';
+	?>
+	<div class="tn-video-field">
+		<div class="tn-video-list"></div>
+		<p><button type="button" class="button tn-add-video"><?php esc_html_e( '+ Add video', 'trail-notes' ); ?></button></p>
+		<textarea id="tn_videos" name="tn_videos" class="tn-media-json" rows="3"><?php echo esc_textarea( $value ); ?></textarea>
+	</div>
+	<?php
 }
 
 function tn_render_seo_box( $post ) {
@@ -224,7 +309,6 @@ function tn_save_trek_meta( $post_id ) {
 		'tn_seasons',
 		'tn_wish_i_knew',
 		'tn_suitability_description',
-		'tn_photo_groups',
 		'tn_seo_description',
 	);
 	foreach ( $textarea_fields as $field ) {
@@ -233,6 +317,87 @@ function tn_save_trek_meta( $post_id ) {
 		}
 	}
 
+	if ( isset( $_POST['tn_photo_gallery'] ) ) {
+		update_post_meta( $post_id, 'tn_photo_gallery', wp_json_encode( tn_sanitize_photo_gallery( $_POST['tn_photo_gallery'] ) ) );
+	}
+	if ( isset( $_POST['tn_videos'] ) ) {
+		update_post_meta( $post_id, 'tn_videos', wp_json_encode( tn_sanitize_videos( $_POST['tn_videos'] ) ) );
+	}
+
 	update_post_meta( $post_id, 'tn_has_real_experience', isset( $_POST['tn_has_real_experience'] ) ? '1' : '' );
 }
 add_action( 'save_post_trek', 'tn_save_trek_meta' );
+
+/**
+ * Validate the Photo Journal JSON: drop empty groups and any attachment ID
+ * that isn't actually a Media Library attachment.
+ */
+function tn_sanitize_photo_gallery( $raw ) {
+	$decoded = json_decode( wp_unslash( $raw ), true );
+	if ( ! is_array( $decoded ) ) {
+		return array();
+	}
+
+	$clean = array();
+	foreach ( $decoded as $group ) {
+		if ( ! is_array( $group ) ) {
+			continue;
+		}
+		$label = isset( $group['label'] ) ? sanitize_text_field( $group['label'] ) : '';
+		$ids   = array();
+		if ( ! empty( $group['ids'] ) && is_array( $group['ids'] ) ) {
+			foreach ( $group['ids'] as $id ) {
+				$id = (int) $id;
+				if ( $id > 0 && 'attachment' === get_post_type( $id ) ) {
+					$ids[] = $id;
+				}
+			}
+		}
+		if ( $label || $ids ) {
+			$clean[] = array(
+				'label' => $label,
+				'ids'   => $ids,
+			);
+		}
+	}
+	return $clean;
+}
+
+/**
+ * Validate the Trek Videos JSON: an "upload" entry must point at a real
+ * attachment, an "embed" entry must be a well-formed URL.
+ */
+function tn_sanitize_videos( $raw ) {
+	$decoded = json_decode( wp_unslash( $raw ), true );
+	if ( ! is_array( $decoded ) ) {
+		return array();
+	}
+
+	$clean = array();
+	foreach ( $decoded as $item ) {
+		if ( ! is_array( $item ) ) {
+			continue;
+		}
+		$label = isset( $item['label'] ) ? sanitize_text_field( $item['label'] ) : '';
+		$type  = ( isset( $item['type'] ) && 'upload' === $item['type'] ) ? 'upload' : 'embed';
+		$value = '';
+
+		if ( 'upload' === $type ) {
+			$id = isset( $item['value'] ) ? (int) $item['value'] : 0;
+			if ( $id > 0 && 'attachment' === get_post_type( $id ) ) {
+				$value = $id;
+			}
+		} else {
+			$value = isset( $item['value'] ) ? esc_url_raw( $item['value'] ) : '';
+		}
+
+		if ( $value ) {
+			$clean[] = array(
+				'label' => $label,
+				'type'  => $type,
+				'value' => $value,
+			);
+		}
+	}
+	return $clean;
+}

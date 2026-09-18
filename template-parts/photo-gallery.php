@@ -1,9 +1,8 @@
 <?php
 /**
  * Editorial photo journal, grouped by day, rendered as a masonry grid of
- * placeholder tiles. Swap a tile's markup for a real <img> (or
- * wp_get_attachment_image()) as photos become available — the group
- * structure stays the same either way.
+ * real uploaded photos (Photo Journal meta box → Media Library). Each
+ * photo opens full-size in the lightbox handled by assets/js/main.js.
  *
  * @package Trail_Notes
  */
@@ -13,32 +12,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $post_id = isset( $args['post_id'] ) ? (int) $args['post_id'] : get_the_ID();
-$groups  = tn_parse_pipe_lines( tn_meta( $post_id, 'tn_photo_groups' ) );
+$groups  = tn_get_json_meta( $post_id, 'tn_photo_gallery' );
 $ratios  = array( '4-3', '3-4', '1-1', '16-9' );
 ?>
 <?php if ( $groups ) : ?>
 	<?php foreach ( $groups as $group ) : ?>
 		<?php
-		$label = $group[0] ?? '';
-		$count = isset( $group[1] ) ? max( 1, min( 12, (int) $group[1] ) ) : 4;
+		$label = $group['label'] ?? '';
+		$ids   = $group['ids'] ?? array();
+		if ( empty( $ids ) ) {
+			continue;
+		}
 		?>
 		<div class="photo-journal-group">
-			<h4><?php echo esc_html( $label ); ?></h4>
+			<?php if ( $label ) : ?>
+				<h4><?php echo esc_html( $label ); ?></h4>
+			<?php endif; ?>
 			<div class="masonry">
-				<?php for ( $i = 1; $i <= $count; $i++ ) : ?>
+				<?php foreach ( $ids as $i => $attachment_id ) : ?>
 					<?php
-					echo tn_image(
-						array(
-							'label' => sprintf( /* translators: 1: gallery group label, 2: photo number */ __( '%1$s — photo %2$d', 'trail-notes' ), $label, $i ),
-							'ratio' => $ratios[ $i % count( $ratios ) ],
-							'tone'  => 0 === $i % 3 ? 'earth' : '',
-						)
-					);
+					$full_url = wp_get_attachment_image_url( $attachment_id, 'full' );
+					$alt      = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+					if ( ! $alt ) {
+						$alt = $label ? $label : get_the_title( $post_id );
+					}
+					$ratio = $ratios[ $i % count( $ratios ) ];
 					?>
-				<?php endfor; ?>
+					<a
+						class="placeholder-img has-photo ratio-<?php echo esc_attr( $ratio ); ?> lightbox-trigger"
+						href="<?php echo esc_url( $full_url ); ?>"
+						data-lightbox
+						aria-label="<?php echo esc_attr( $alt ); ?>"
+					>
+						<?php echo wp_get_attachment_image( $attachment_id, 'tn-card', false, array( 'alt' => esc_attr( $alt ), 'loading' => 'lazy' ) ); ?>
+					</a>
+				<?php endforeach; ?>
 			</div>
 		</div>
 	<?php endforeach; ?>
 <?php else : ?>
-	<p class="body-text"><?php echo tn_placeholder_text( __( 'Add photo journal groups (e.g. Day 1, Summit Day) for this trek in the trek editor.', 'trail-notes' ) ); ?></p>
+	<p class="body-text"><?php echo tn_placeholder_text( __( 'Add photo journal groups and upload real photos for this trek in the trek editor.', 'trail-notes' ) ); ?></p>
 <?php endif; ?>

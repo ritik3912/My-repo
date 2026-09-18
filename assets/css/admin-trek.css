@@ -1,0 +1,169 @@
+/**
+ * Admin-only styling for the Trek meta boxes: the repeater tables (route,
+ * itinerary, cost, seasons, wish-i-knew, packing) and the photo/video
+ * media pickers. Loaded only on the Trek add/edit screen.
+ */
+
+.tn-field-label {
+	margin: 1.25rem 0 0.5rem;
+}
+
+.tn-field-label:first-child {
+	margin-top: 0;
+}
+
+.tn-field-label strong {
+	display: inline-block;
+	margin-bottom: 2px;
+}
+
+.tn-repeater-table {
+	width: 100%;
+	border-collapse: collapse;
+	background: #fff;
+	margin-bottom: 0.5rem;
+}
+
+.tn-repeater-table th,
+.tn-repeater-table td {
+	border: 1px solid #dcdcde;
+	padding: 6px 8px;
+	vertical-align: top;
+}
+
+.tn-repeater-table th {
+	background: #f6f7f7;
+	text-align: left;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: #50575e;
+}
+
+.tn-repeater-table input[type="text"],
+.tn-repeater-table textarea {
+	width: 100%;
+	border: 1px solid #dcdcde;
+	padding: 4px 6px;
+	font-size: 13px;
+}
+
+.tn-repeater-table textarea {
+	resize: vertical;
+	font-family: inherit;
+}
+
+.tn-repeater-actions {
+	width: 32px;
+	text-align: center;
+}
+
+.tn-repeater-remove,
+.tn-remove-group,
+.tn-remove-video {
+	color: #b32d2e;
+	text-decoration: none;
+}
+
+.tn-repeater-remove:hover,
+.tn-remove-group:hover,
+.tn-remove-video:hover {
+	color: #7e1f1f;
+}
+
+.tn-repeater-raw {
+	font-family: monospace;
+}
+
+/* ---------- Photo galleries ---------- */
+.tn-photo-group {
+	border: 1px solid #dcdcde;
+	background: #fff;
+	border-radius: 4px;
+	padding: 12px;
+	margin-bottom: 12px;
+}
+
+.tn-group-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.tn-group-head input[type="text"] {
+	flex: 1;
+	max-width: 320px;
+}
+
+.tn-thumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 10px;
+}
+
+.tn-thumb {
+	position: relative;
+	width: 84px;
+	height: 84px;
+	border-radius: 4px;
+	overflow: hidden;
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+}
+
+.tn-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.tn-thumb-remove {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 20px;
+	height: 20px;
+	line-height: 18px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.65);
+	color: #fff;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.tn-thumb-remove:hover {
+	background: #b32d2e;
+}
+
+/* ---------- Videos ---------- */
+.tn-video-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 10px;
+	border: 1px solid #dcdcde;
+	background: #fff;
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+
+.tn-video-row input[type="text"],
+.tn-video-row input[type="url"] {
+	flex: 1;
+	min-width: 180px;
+}
+
+.tn-video-chosen {
+	font-size: 12px;
+	color: #50575e;
+}
+
+.tn-media-json {
+	display: none;
+}

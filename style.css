@@ -650,7 +650,7 @@ h3 {
 .hero-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(21, 32, 24, 0.35) 0%, rgba(21, 32, 24, 0.55) 55%, rgba(21, 32, 24, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 17, 0.55) 0%, rgba(15, 23, 17, 0.68) 45%, rgba(15, 23, 17, 0.92) 100%);
 }
 
 .hero-content {
@@ -660,8 +660,14 @@ h3 {
   max-width: 780px;
 }
 
+.hero-content .eyebrow,
+.hero-content h1,
+.hero-content .lede {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
 .hero-content .eyebrow {
-  color: rgba(247, 243, 236, 0.85);
+  color: rgba(247, 243, 236, 0.9);
 }
 
 .hero-content h1 {
@@ -669,7 +675,7 @@ h3 {
 }
 
 .hero-content .lede {
-  color: rgba(247, 243, 236, 0.88);
+  color: rgba(247, 243, 236, 0.92);
   margin-top: 1.25rem;
   max-width: 55ch;
 }
@@ -751,11 +757,46 @@ h3 {
   max-width: 820px;
 }
 
+.trek-hero-content .eyebrow,
+.trek-hero-content h1,
+.trek-hero-content .lede {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.trek-hero-content .lede {
+  color: rgba(247, 243, 236, 0.92);
+}
+
 .trek-hero-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 1.25rem;
+}
+
+/* A fact that doesn't fit a pill (e.g. a full best-season sentence) gets
+   its own readable banner instead of stretching into a mangled oval. */
+.trek-hero-season {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+  max-width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: rgba(15, 23, 17, 0.6);
+  border: 1px solid rgba(247, 243, 236, 0.25);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(4px);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(247, 243, 236, 0.95);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.trek-hero-season svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--color-earth-light);
 }
 
 /* ---------- Breadcrumbs ---------- */
@@ -873,6 +914,7 @@ h3 {
 
 /* ---------- Trek Card ---------- */
 .trek-card {
+  position: relative;
   background: var(--color-white);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -880,6 +922,7 @@ h3 {
   border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
@@ -926,14 +969,14 @@ h3 {
   color: var(--color-earth-dark);
 }
 
+/* The stretched-link's containing block is .trek-card (see below), not
+   this h3, so the hit area covers the whole card — including the
+   "Explore the Trek" label — not just the title text. */
 .trek-card-body h3 a::after {
   content: "";
   position: absolute;
   inset: 0;
-}
-
-.trek-card-body h3 {
-  position: relative;
+  z-index: 1;
 }
 
 .trek-card-desc {
@@ -957,8 +1000,15 @@ h3 {
   white-space: nowrap;
 }
 
-.trek-card {
-  position: relative;
+/* The stretched-link overlay sits above this span so the whole card stays
+   one click target — animate the arrow off the card hover instead of a
+   direct hover on the (now unreachable) span itself. */
+.trek-card:hover .trek-card-footer .btn-text {
+  gap: 0.65rem;
+}
+
+.trek-card:hover .trek-card-footer .btn-text svg {
+  transform: translateX(3px);
 }
 
 /* ---------- Quick Info grid ---------- */
@@ -1383,6 +1433,99 @@ h3 {
   .masonry {
     column-count: 3;
   }
+}
+
+.lightbox-trigger {
+  cursor: zoom-in;
+}
+
+.lightbox-trigger::after {
+  content: none;
+}
+
+.lightbox-trigger:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+/* Click-to-enlarge overlay for real trek photos, built by main.js. No
+   library — a fixed-position dialog with the clicked image swapped in. */
+.tn-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(15, 23, 17, 0.92);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition);
+}
+
+.tn-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tn-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lift);
+}
+
+.tn-lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(247, 243, 236, 0.3);
+  background: rgba(247, 243, 236, 0.1);
+  color: var(--color-cream);
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tn-lightbox-close:hover {
+  background: rgba(247, 243, 236, 0.2);
+}
+
+/* ---------- Trail videos ---------- */
+.video-card {
+  background: var(--color-charcoal);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.video-responsive {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--color-forest-dark);
+}
+
+.video-responsive iframe,
+.video-responsive video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  object-fit: cover;
+}
+
+.video-card figcaption {
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: rgba(247, 243, 236, 0.85);
 }
 
 /* ---------- Travel tip card ---------- */

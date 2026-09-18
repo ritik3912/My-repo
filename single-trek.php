@@ -53,10 +53,13 @@ while ( have_posts() ) :
 					<?php if ( $highest_point ) : ?>
 						<span class="badge badge-outline"><?php echo esc_html( $highest_point ); ?></span>
 					<?php endif; ?>
-					<?php if ( $best_season ) : ?>
-						<span class="badge badge-outline"><?php echo esc_html( $best_season ); ?></span>
-					<?php endif; ?>
 				</div>
+				<?php if ( $best_season ) : ?>
+					<p class="trek-hero-season">
+						<?php echo tn_icon( 'calendar' ); ?>
+						<span><?php echo esc_html( $best_season ); ?></span>
+					</p>
+				<?php endif; ?>
 			</div>
 		</section>
 
@@ -172,6 +175,16 @@ while ( have_posts() ) :
 					<h2><?php esc_html_e( 'Along the Trail', 'trail-notes' ); ?></h2>
 				</div>
 				<div class="reveal"><?php get_template_part( 'template-parts/photo-gallery', null, array( 'post_id' => $post_id ) ); ?></div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
+				<div class="section-head reveal">
+					<span class="eyebrow"><?php echo tn_icon( 'play', 'visually-hidden' ); ?><?php esc_html_e( 'Trail Videos', 'trail-notes' ); ?></span>
+					<h2><?php esc_html_e( 'See It in Motion', 'trail-notes' ); ?></h2>
+				</div>
+				<div class="reveal"><?php get_template_part( 'template-parts/video-gallery', null, array( 'post_id' => $post_id ) ); ?></div>
 			</div>
 		</section>
 
