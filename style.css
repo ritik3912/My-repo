@@ -663,7 +663,7 @@ h3 {
 .hero-content .eyebrow,
 .hero-content h1,
 .hero-content .lede {
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 2px 20px rgba(0, 0, 0, 0.6);
 }
 
 .hero-content .eyebrow {
@@ -675,7 +675,7 @@ h3 {
 }
 
 .hero-content .lede {
-  color: rgba(247, 243, 236, 0.92);
+  color: #ffffff;
   margin-top: 1.25rem;
   max-width: 55ch;
 }
@@ -760,11 +760,11 @@ h3 {
 .trek-hero-content .eyebrow,
 .trek-hero-content h1,
 .trek-hero-content .lede {
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 2px 20px rgba(0, 0, 0, 0.6);
 }
 
 .trek-hero-content .lede {
-  color: rgba(247, 243, 236, 0.92);
+  color: #ffffff;
 }
 
 .trek-hero-meta {
