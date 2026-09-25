@@ -47,6 +47,15 @@ Every image on the site is a placeholder tile (a labelled gradient box) until a 
 - **Hero / card images**: set the post's Featured Image.
 - **Photo Journal galleries**: currently rendered as placeholder counts (`template-parts/photo-gallery.php`). Swap in real photos by editing that file to loop over an actual gallery/attachment list instead of a placeholder count once photos are ready — the group structure (Day 1, Summit Day, etc.) stays the same.
 
+## Island Resort page
+
+`page-resort.php` is a standalone, full-width luxury resort landing page (its own transparent header, overlay menu and dark footer), styled by `assets/css/resort.css` and `assets/js/resort.js`, with Cormorant Garamond + Jost fonts. These load only on this template (`inc/resort.php`).
+
+1. **Pages → Add New**, pick **Template: Island Resort**, publish.
+2. Set the page's **Featured Image** for the full-screen hero.
+3. Edit the arrays at the top of `page-resort.php` (rooms, experiences, dining/spa, reviews, gallery) to change the copy. The prices and reviews there are sample content, so replace them with real ones.
+4. The availability bar is front-end only. Point its `action` at your booking plugin or engine to take real reservations.
+
 ## Plan a Trek form
 
 `page-plan-a-trek.php` posts to `admin-post.php` (handled in `inc/plan-a-trek-form.php`) and emails the WordPress admin address via `wp_mail()` — no forms plugin or external service required. Make sure your WordPress host can actually send mail (many local/dev environments can't without an SMTP plugin).
@@ -68,6 +77,7 @@ front-page.php         Homepage
 archive-trek.php       /treks/ — listing + Trek Finder
 single-trek.php         Full trek detail page
 page-about.php / page-travel-tips.php / page-plan-a-trek.php   Template Name pages
+page-resort.php        Island Resort landing page (+ inc/resort.php, assets/css/resort.css, assets/js/resort.js)
 page.php / index.php / single.php / 404.php   Fallback templates
 template-parts/*.php   Reusable, data-driven components
 assets/js/main.js      Sticky header, mobile menu, scroll reveal, Trek Finder filtering

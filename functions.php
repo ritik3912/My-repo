@@ -80,6 +80,7 @@ require TN_DIR . '/inc/seo.php';
 require TN_DIR . '/inc/plan-a-trek-form.php';
 require TN_DIR . '/inc/customizer.php';
 require TN_DIR . '/inc/seed-content.php';
+require TN_DIR . '/inc/resort.php';
 
 /**
  * Fallback content width.
