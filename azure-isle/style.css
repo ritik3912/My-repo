@@ -417,8 +417,66 @@ body:not(.has-hero) .az-header .az-btn-line {
   min-width: 0;
 }
 
+.az-nav ul {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.az-nav li {
+  position: relative;
+}
+
+.az-nav a {
+  display: inline-block;
+  padding: 0.4rem 0;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 300ms var(--az-ease);
+}
+
+.az-nav a:hover,
+.az-nav .current-menu-item > a {
+  background-size: 100% 1px;
+}
+
+.az-nav .sub-menu {
+  position: absolute;
+  top: 100%;
+  left: -1.25rem;
+  display: block;
+  min-width: 220px;
+  padding: 0.75rem 1.25rem;
+  background: var(--az-ivory);
+  color: var(--az-ink);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 250ms, transform 250ms, visibility 250ms;
+}
+
+.az-nav li:hover > .sub-menu,
+.az-nav li:focus-within > .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
 .az-menu-toggle {
   position: relative;
+  flex-shrink: 0;
+  margin-right: 5.5rem;
   display: inline-flex;
   flex-direction: column;
   gap: 7px;
@@ -1903,6 +1961,12 @@ body:not(.has-hero) #main {
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 1280px) {
+  .az-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 1100px) {
   .az-header-phone span {
     display: none;
@@ -1974,6 +2038,10 @@ body:not(.has-hero) #main {
   .az-header-cta,
   .az-menu-label {
     display: none;
+  }
+
+  .az-menu-toggle {
+    margin-right: 0;
   }
 
   .az-header-inner {

@@ -29,6 +29,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span></span><span></span>
 				<span class="az-menu-label"><?php esc_html_e( 'Menu', 'azure-isle' ); ?></span>
 			</button>
+			<nav class="az-nav" aria-label="<?php esc_attr_e( 'Header', 'azure-isle' ); ?>">
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'primary',
+						'container'      => false,
+						'menu_class'     => 'az-nav-list',
+						'depth'          => 2,
+						'fallback_cb'    => 'azure_menu_fallback',
+					)
+				);
+				?>
+			</nav>
 		</div>
 
 		<?php azure_logo(); ?>
