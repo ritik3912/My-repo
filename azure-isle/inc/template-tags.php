@@ -145,16 +145,16 @@ function azure_page_url( $template ) {
  */
 function azure_menu_fallback( $args = array() ) {
 	$links = array(
-		home_url( '/' )                                => __( 'Home', 'azure-isle' ),
-		get_post_type_archive_link( 'azure_room' )     => __( 'Rooms', 'azure-isle' ),
-		azure_page_url( 'template-about.php' )         => __( 'About', 'azure-isle' ),
-		azure_page_url( 'template-contact.php' )       => __( 'Contact', 'azure-isle' ),
+		array( home_url( '/' ), __( 'Home', 'azure-isle' ) ),
+		array( get_post_type_archive_link( 'azure_room' ), __( 'Rooms', 'azure-isle' ) ),
+		array( azure_page_url( 'template-about.php' ), __( 'About', 'azure-isle' ) ),
+		array( azure_page_url( 'template-contact.php' ), __( 'Contact', 'azure-isle' ) ),
 	);
 	$class = ! empty( $args['menu_class'] ) ? $args['menu_class'] : 'menu';
 	echo '<ul class="' . esc_attr( $class ) . '">';
-	foreach ( $links as $url => $label ) {
-		if ( $url ) {
-			echo '<li><a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a></li>';
+	foreach ( $links as $link ) {
+		if ( $link[0] ) {
+			echo '<li><a href="' . esc_url( $link[0] ) . '">' . esc_html( $link[1] ) . '</a></li>';
 		}
 	}
 	echo '</ul>';

@@ -27,21 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="az-header-left">
 			<button type="button" class="az-menu-toggle" id="az-menu-toggle" aria-expanded="false" aria-controls="az-menu">
 				<span></span><span></span>
-				<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'azure-isle' ); ?></span>
+				<span class="az-menu-label"><?php esc_html_e( 'Menu', 'azure-isle' ); ?></span>
 			</button>
-			<nav class="az-nav" aria-label="<?php esc_attr_e( 'Main', 'azure-isle' ); ?>">
-				<?php
-				wp_nav_menu(
-					array(
-						'theme_location' => 'primary',
-						'container'      => false,
-						'menu_class'     => 'az-nav-list',
-						'depth'          => 2,
-						'fallback_cb'    => 'azure_menu_fallback',
-					)
-				);
-				?>
-			</nav>
 		</div>
 
 		<?php azure_logo(); ?>
@@ -61,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<button type="button" class="az-menu-close" id="az-menu-close">
 		&times;<span class="screen-reader-text"><?php esc_html_e( 'Close menu', 'azure-isle' ); ?></span>
 	</button>
-	<nav aria-label="<?php esc_attr_e( 'Mobile', 'azure-isle' ); ?>">
+	<nav aria-label="<?php esc_attr_e( 'Main', 'azure-isle' ); ?>">
 		<?php
 		wp_nav_menu(
 			array(

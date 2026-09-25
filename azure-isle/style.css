@@ -417,63 +417,9 @@ body:not(.has-hero) .az-header .az-btn-line {
   min-width: 0;
 }
 
-.az-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.az-nav li {
-  position: relative;
-}
-
-.az-nav a {
-  display: inline-block;
-  padding: 0.4rem 0;
-  font-size: 0.74rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0 1px;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition: background-size 300ms var(--az-ease);
-}
-
-.az-nav a:hover,
-.az-nav .current-menu-item > a {
-  background-size: 100% 1px;
-}
-
-.az-nav .sub-menu {
-  position: absolute;
-  top: 100%;
-  left: -1.25rem;
-  display: block;
-  min-width: 220px;
-  padding: 0.75rem 1.25rem;
-  background: var(--az-ivory);
-  color: var(--az-ink);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity 250ms, transform 250ms, visibility 250ms;
-}
-
-.az-nav li:hover > .sub-menu,
-.az-nav li:focus-within > .sub-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-}
-
 .az-menu-toggle {
-  display: none;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
   gap: 7px;
   padding: 0.5rem 0;
@@ -483,7 +429,7 @@ body:not(.has-hero) .az-header .az-btn-line {
   cursor: pointer;
 }
 
-.az-menu-toggle span:not(.screen-reader-text) {
+.az-menu-toggle span:not(.az-menu-label) {
   display: block;
   width: 28px;
   height: 1px;
@@ -492,6 +438,25 @@ body:not(.has-hero) .az-header .az-btn-line {
 
 .az-menu-toggle span:nth-child(2) {
   width: 18px;
+}
+
+.az-menu-label {
+  position: absolute;
+  left: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.az-menu ul:hover a {
+  opacity: 0.5;
+}
+
+.az-menu ul a:hover {
+  opacity: 1;
 }
 
 .az-logo {
@@ -553,7 +518,7 @@ body:not(.has-hero) #main {
   padding-top: 100px;
 }
 
-/* ---------- Overlay menu (mobile) ---------- */
+/* ---------- Overlay menu ---------- */
 .az-menu {
   position: fixed;
   inset: 0;
@@ -602,6 +567,7 @@ body:not(.has-hero) #main {
 .az-menu a:not(.az-btn) {
   display: inline-block;
   padding: 0.3rem 0;
+  transition: opacity 250ms;
   font-family: var(--az-serif);
   font-size: clamp(1.9rem, 6vw, 2.8rem);
   line-height: 1.3;
@@ -725,10 +691,11 @@ body:not(.has-hero) #main {
   grid-auto-flow: column;
   gap: 30px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
 }
 
 .az-track::-webkit-scrollbar {
@@ -1937,13 +1904,8 @@ body:not(.has-hero) #main {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
-  .az-nav,
   .az-header-phone span {
     display: none;
-  }
-
-  .az-menu-toggle {
-    display: inline-flex;
   }
 
   .az-room-slider .az-track {
@@ -2009,7 +1971,8 @@ body:not(.has-hero) #main {
     font-size: 16px;
   }
 
-  .az-header-cta {
+  .az-header-cta,
+  .az-menu-label {
     display: none;
   }
 
