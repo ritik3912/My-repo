@@ -47,6 +47,10 @@ Every image on the site is a placeholder tile (a labelled gradient box) until a 
 - **Hero / card images**: set the post's Featured Image.
 - **Photo Journal galleries**: currently rendered as placeholder counts (`template-parts/photo-gallery.php`). Swap in real photos by editing that file to loop over an actual gallery/attachment list instead of a placeholder count once photos are ready — the group structure (Day 1, Summit Day, etc.) stays the same.
 
+## Azure Isle (separate resort theme)
+
+The `azure-isle/` folder is a complete, standalone WordPress theme for an island resort, built from the Island Resort page below. Zip that folder and upload it under **Appearance → Themes → Add New → Upload Theme**. See `azure-isle/readme.txt` for setup.
+
 ## Island Resort page
 
 `page-resort.php` is a standalone, full-width luxury resort landing page (its own transparent header, overlay menu and dark footer), styled by `assets/css/resort.css` and `assets/js/resort.js`, with Cormorant Garamond + Jost fonts. These load only on this template (`inc/resort.php`).
