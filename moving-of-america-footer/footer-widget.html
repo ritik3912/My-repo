@@ -1,0 +1,214 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* Moving of America — site footer */
+
+.moa-footer {
+  --moa-footer-bg: #26488f;
+  --moa-footer-text: #ffffff;
+  --moa-footer-hover: #cfdcf7;
+
+  background: var(--moa-footer-bg);
+  color: var(--moa-footer-text);
+  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  padding: 8px 34px 28px;
+  border-top: 2px solid #1c3a7a;
+}
+
+.moa-footer *,
+.moa-footer *::before,
+.moa-footer *::after {
+  box-sizing: border-box;
+}
+
+.moa-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 40px;
+  row-gap: 26px;
+}
+
+.moa-footer__heading {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  color: var(--moa-footer-text);
+}
+
+.moa-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.moa-footer__list li {
+  margin: 0;
+  line-height: 25.3px;
+}
+
+.moa-footer__list a {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--moa-footer-text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.moa-footer__list a:hover,
+.moa-footer__list a:focus-visible {
+  color: var(--moa-footer-hover);
+  text-decoration: underline;
+}
+
+.moa-footer__list a:focus-visible {
+  outline: 2px solid var(--moa-footer-hover);
+  outline-offset: 2px;
+}
+
+/* Tablet: two columns */
+@media (max-width: 900px) {
+  .moa-footer {
+    padding: 24px 24px 32px;
+  }
+
+  .moa-footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 32px;
+  }
+}
+
+/* Phone: single column */
+@media (max-width: 540px) {
+  .moa-footer {
+    padding: 24px 16px 32px;
+  }
+
+  .moa-footer__grid {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+
+  .moa-footer__heading {
+    font-size: 14px;
+  }
+
+  .moa-footer__list li {
+    line-height: 30px;
+  }
+
+  .moa-footer__list a {
+    font-size: 13px;
+  }
+}
+</style>
+
+<footer class="moa-footer">
+  <div class="moa-footer__grid">
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-moving">
+      <h3 class="moa-footer__heading" id="moa-footer-moving">Moving</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/local-moving/">Local Moving</a></li>
+        <li><a href="/long-distance-moving/">Long Distance Moving</a></li>
+        <li><a href="/residential-moving/">Residential Moving</a></li>
+        <li><a href="/apartment-moving/">Apartment Moving</a></li>
+        <li><a href="/commercial-moving/">Commercial Moving</a></li>
+        <li><a href="/office-moving/">Office Moving</a></li>
+        <li><a href="/international-moving/">International Moving</a></li>
+        <li><a href="/senior-citizen-moving/">Senior Citizen Moving</a></li>
+        <li><a href="/estate-moving/">Estate Moving</a></li>
+        <li><a href="/eviction-moving/">Eviction Moving</a></li>
+        <li><a href="/full-service-moving/">Full Service Moving</a></li>
+      </ul>
+    </nav>
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-specialized-moving">
+      <h3 class="moa-footer__heading" id="moa-footer-specialized-moving">Specialized Moving</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/piano-moving/">Piano Moving</a></li>
+        <li><a href="/art-and-antique-moving/">Art &amp; Antique Moving</a></li>
+        <li><a href="/wine-cellar-moving/">Wine Cellar Moving</a></li>
+        <li><a href="/chandelier-moving/">Chandelier Moving</a></li>
+        <li><a href="/appliance-moving/">Appliance Moving</a></li>
+        <li><a href="/college-moving/">College Moving</a></li>
+        <li><a href="/trade-show-moving/">Trade Show Moving</a></li>
+        <li><a href="/hospital-moving/">Hospital Moving</a></li>
+        <li><a href="/military-moving/">Military Moving</a></li>
+        <li><a href="/furniture-moving/">Furniture Moving</a></li>
+        <li><a href="/gym-moving/">Gym Moving</a></li>
+        <li><a href="/restaurant-moving/">Restaurant Moving</a></li>
+      </ul>
+    </nav>
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-storage">
+      <h3 class="moa-footer__heading" id="moa-footer-storage">Storage</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/short-term-storage/">Short Term Storage</a></li>
+        <li><a href="/long-term-storage/">Long Term Storage</a></li>
+        <li><a href="/storage-in-transit/">Storage in Transit</a></li>
+        <li><a href="/residential-storage/">Residential Storage</a></li>
+        <li><a href="/business-storage/">Business Storage</a></li>
+        <li><a href="/storage-moves-and-delivery/">Storage Moves &amp; Delivery</a></li>
+        <li><a href="/storage-tips/">Storage Tips</a></li>
+      </ul>
+    </nav>
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-services">
+      <h3 class="moa-footer__heading" id="moa-footer-services">Services</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/packing-and-unpacking/">Packing and Unpacking</a></li>
+        <li><a href="/white-glove-moves/">White Glove Moves</a></li>
+        <li><a href="/home-staging/">Home Staging</a></li>
+        <li><a href="/final-mile-delivery/">Final Mile Delivery</a></li>
+        <li><a href="/tv-installation/">TV Installation</a></li>
+        <li><a href="/request-certificate-of-insurance/">Request Certificate of Insurance</a></li>
+        <li><a href="/rent-plastic-boxes/">Rent Plastic Boxes</a></li>
+      </ul>
+    </nav>
+
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-locations">
+      <h3 class="moa-footer__heading" id="moa-footer-locations">Locations</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/new-jersey-moves/">New Jersey Moves</a></li>
+        <li><a href="/new-york-moves/">New York Moves</a></li>
+        <li><a href="/connecticut-moves/">Connecticut Moves</a></li>
+        <li><a href="/pennsylvania-moves/">Pennsylvania Moves</a></li>
+        <li><a href="/all-locations/">All Locations</a></li>
+      </ul>
+    </nav>
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-resources">
+      <h3 class="moa-footer__heading" id="moa-footer-resources">Resources</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/reviews/">Reviews</a></li>
+        <li><a href="/your-rights-and-responsibilities/">Your Rights &amp; Responsibilities</a></li>
+        <li><a href="/moving-faqs/">Moving FAQs</a></li>
+        <li><a href="/moving-and-packing-tips/">Moving &amp; Packing Tips</a></li>
+        <li><a href="/moving-with-kids/">Moving With Kids</a></li>
+        <li><a href="/moving-with-pets/">Moving With Pets</a></li>
+        <li><a href="/moving-coverage-and-valuation/">Moving Coverage &amp; Valuation</a></li>
+        <li><a href="/move-view-packages/">Move View Packages</a></li>
+        <li><a href="/moving-checklist/">Moving Checklist</a></li>
+        <li><a href="/request-coi/">Request COI</a></li>
+      </ul>
+    </nav>
+    <nav class="moa-footer__col" aria-labelledby="moa-footer-company">
+      <h3 class="moa-footer__heading" id="moa-footer-company">Company</h3>
+      <ul class="moa-footer__list">
+        <li><a href="/our-story/">Our Story</a></li>
+        <li><a href="/quality-assurance/">Quality Assurance</a></li>
+        <li><a href="/pro-mover-advantage/">Pro-Mover Advantage</a></li>
+        <li><a href="/community/">Community</a></li>
+        <li><a href="/licenses-and-credentials/">Licenses &amp; Credentials</a></li>
+        <li><a href="/become-preferred-partner/">Become Preferred Partner</a></li>
+        <li><a href="/comments-and-complaints/">Comments &amp; Complaints</a></li>
+        <li><a href="/careers/">Careers</a></li>
+        <li><a href="/contact-us/">Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
