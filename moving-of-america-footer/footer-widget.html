@@ -23,11 +23,20 @@
   box-sizing: border-box;
 }
 
-.moa-footer__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.moa-footer .moa-footer__grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   column-gap: 40px;
   row-gap: 26px;
+  width: 100%;
+  max-width: none;
+}
+
+.moa-footer .moa-footer__col {
+  display: block !important;
+  width: auto !important;
+  float: none !important;
+  min-width: 0;
 }
 
 .moa-footer__heading {
@@ -73,26 +82,26 @@
   outline-offset: 2px;
 }
 
-/* Tablet: two columns */
+/* Small tablets: keep 4 columns, tighten spacing */
 @media (max-width: 900px) {
   .moa-footer {
-    padding: 24px 24px 32px;
+    padding: 24px 20px 32px;
   }
 
-  .moa-footer__grid {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 32px;
+  .moa-footer .moa-footer__grid {
+    column-gap: 20px;
   }
 }
 
-/* Phone: single column */
+/* Phones: two columns so text stays readable */
 @media (max-width: 540px) {
   .moa-footer {
     padding: 24px 16px 32px;
   }
 
-  .moa-footer__grid {
-    grid-template-columns: 1fr;
+  .moa-footer .moa-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 16px;
     row-gap: 28px;
   }
 
@@ -112,7 +121,7 @@
 
 <footer class="moa-footer">
   <div class="moa-footer__grid">
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-moving">
+    <div class="moa-footer__col" aria-labelledby="moa-footer-moving">
       <h3 class="moa-footer__heading" id="moa-footer-moving">Moving</h3>
       <ul class="moa-footer__list">
         <li><a href="/local-moving/">Local Moving</a></li>
@@ -127,8 +136,8 @@
         <li><a href="/eviction-moving/">Eviction Moving</a></li>
         <li><a href="/full-service-moving/">Full Service Moving</a></li>
       </ul>
-    </nav>
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-specialized-moving">
+    </div>
+    <div class="moa-footer__col" aria-labelledby="moa-footer-specialized-moving">
       <h3 class="moa-footer__heading" id="moa-footer-specialized-moving">Specialized Moving</h3>
       <ul class="moa-footer__list">
         <li><a href="/piano-moving/">Piano Moving</a></li>
@@ -144,8 +153,8 @@
         <li><a href="/gym-moving/">Gym Moving</a></li>
         <li><a href="/restaurant-moving/">Restaurant Moving</a></li>
       </ul>
-    </nav>
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-storage">
+    </div>
+    <div class="moa-footer__col" aria-labelledby="moa-footer-storage">
       <h3 class="moa-footer__heading" id="moa-footer-storage">Storage</h3>
       <ul class="moa-footer__list">
         <li><a href="/short-term-storage/">Short Term Storage</a></li>
@@ -156,8 +165,8 @@
         <li><a href="/storage-moves-and-delivery/">Storage Moves &amp; Delivery</a></li>
         <li><a href="/storage-tips/">Storage Tips</a></li>
       </ul>
-    </nav>
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-services">
+    </div>
+    <div class="moa-footer__col" aria-labelledby="moa-footer-services">
       <h3 class="moa-footer__heading" id="moa-footer-services">Services</h3>
       <ul class="moa-footer__list">
         <li><a href="/packing-and-unpacking/">Packing and Unpacking</a></li>
@@ -168,9 +177,9 @@
         <li><a href="/request-certificate-of-insurance/">Request Certificate of Insurance</a></li>
         <li><a href="/rent-plastic-boxes/">Rent Plastic Boxes</a></li>
       </ul>
-    </nav>
+    </div>
 
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-locations">
+    <div class="moa-footer__col" aria-labelledby="moa-footer-locations">
       <h3 class="moa-footer__heading" id="moa-footer-locations">Locations</h3>
       <ul class="moa-footer__list">
         <li><a href="/new-jersey-moves/">New Jersey Moves</a></li>
@@ -179,8 +188,8 @@
         <li><a href="/pennsylvania-moves/">Pennsylvania Moves</a></li>
         <li><a href="/all-locations/">All Locations</a></li>
       </ul>
-    </nav>
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-resources">
+    </div>
+    <div class="moa-footer__col" aria-labelledby="moa-footer-resources">
       <h3 class="moa-footer__heading" id="moa-footer-resources">Resources</h3>
       <ul class="moa-footer__list">
         <li><a href="/blog/">Blog</a></li>
@@ -195,8 +204,8 @@
         <li><a href="/moving-checklist/">Moving Checklist</a></li>
         <li><a href="/request-coi/">Request COI</a></li>
       </ul>
-    </nav>
-    <nav class="moa-footer__col" aria-labelledby="moa-footer-company">
+    </div>
+    <div class="moa-footer__col" aria-labelledby="moa-footer-company">
       <h3 class="moa-footer__heading" id="moa-footer-company">Company</h3>
       <ul class="moa-footer__list">
         <li><a href="/our-story/">Our Story</a></li>
@@ -209,6 +218,6 @@
         <li><a href="/careers/">Careers</a></li>
         <li><a href="/contact-us/">Contact Us</a></li>
       </ul>
-    </nav>
+    </div>
   </div>
 </footer>
