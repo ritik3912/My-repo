@@ -8,7 +8,6 @@
 .moa-footer {
   --moa-footer-bg: #26488f;
   --moa-footer-text: #ffffff;
-  --moa-footer-hover: #cfdcf7;
 
   background: var(--moa-footer-bg);
   color: var(--moa-footer-text);
@@ -39,16 +38,16 @@
   min-width: 0;
 }
 
-.moa-footer__heading {
-  margin: 0 0 6px;
-  font-size: 13px;
+.moa-footer .moa-footer__heading {
+  margin: 0 0 12px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1.3;
   text-transform: uppercase;
   text-decoration: underline;
   text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
+  text-underline-offset: 4px;
   color: var(--moa-footer-text);
 }
 
@@ -60,26 +59,40 @@
 
 .moa-footer__list li {
   margin: 0;
-  line-height: 25.3px;
+  line-height: 32px;
 }
 
-.moa-footer__list a {
-  font-size: 11px;
+.moa-footer .moa-footer__list a {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
   font-weight: 600;
-  color: var(--moa-footer-text);
-  text-decoration: none;
-  transition: color 0.2s ease;
+  line-height: 1.4;
+  color: var(--moa-footer-text) !important;
+  text-decoration: none !important;
 }
 
-.moa-footer__list a:hover,
-.moa-footer__list a:focus-visible {
-  color: var(--moa-footer-hover);
-  text-decoration: underline;
+/* Animated white underline on hover (text color stays the same) */
+.moa-footer .moa-footer__list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--moa-footer-text);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
-.moa-footer__list a:focus-visible {
-  outline: 2px solid var(--moa-footer-hover);
-  outline-offset: 2px;
+.moa-footer .moa-footer__list a:hover::after,
+.moa-footer .moa-footer__list a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.moa-footer .moa-footer__list a:focus-visible {
+  outline: none;
 }
 
 /* Small tablets: keep 4 columns, tighten spacing */
@@ -105,17 +118,6 @@
     row-gap: 28px;
   }
 
-  .moa-footer__heading {
-    font-size: 14px;
-  }
-
-  .moa-footer__list li {
-    line-height: 30px;
-  }
-
-  .moa-footer__list a {
-    font-size: 13px;
-  }
 }
 </style>
 
