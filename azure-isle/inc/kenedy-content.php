@@ -17,14 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function azure_kenedy_images() {
 	return array(
-		'hero_image'          => 'h-img01.jpg',
+		'hero_image'          => 'img-1.jpg',
 		'carousel_1'          => 'Amenities.jpg',
 		'carousel_2'          => 'IMG_1198.jpeg',
 		'carousel_3'          => 'img-8.jpg',
 		'carousel_4'          => 'img-2.jpg',
 		'carousel_5'          => 'img-18.jpg',
 		'carousel_6'          => 'img-13.jpg',
-		'video_image'         => 'img-1.jpg',
+		'video_image'         => 'h-img01.jpg',
 		'loc_image'           => 'img-7.jpg',
 		'loc_1_image'         => 'img-9.jpg',
 		'loc_2_image'         => 'img-3.jpg',
@@ -89,15 +89,26 @@ function azure_kenedy_attachment( $file ) {
  * Import the photos and assign them, once.
  */
 function azure_kenedy_import() {
-	if ( (int) get_option( 'azure_kenedy_imported' ) >= 2 || ! current_user_can( 'upload_files' ) ) {
+	if ( (int) get_option( 'azure_kenedy_imported' ) >= 3 || ! current_user_can( 'upload_files' ) ) {
 		return;
 	}
 	if ( function_exists( 'set_time_limit' ) ) {
 		set_time_limit( 300 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions -- one-time import.
 	}
 
+	// Slots still holding a photo an earlier version of the theme assigned
+	// are updated too; photos chosen in the Customizer are kept.
+	$media    = get_option( 'azure_kenedy_media', array() );
+	$previous = array(
+		'hero_image'  => 'h-img01.jpg',
+		'video_image' => 'img-1.jpg',
+	);
 	foreach ( azure_kenedy_images() as $mod => $file ) {
-		if ( ! get_theme_mod( 'azure_' . $mod ) ) {
+		$current = (int) get_theme_mod( 'azure_' . $mod );
+		if ( $current && isset( $previous[ $mod ], $media[ $previous[ $mod ] ] ) && (int) $media[ $previous[ $mod ] ] === $current ) {
+			$current = 0;
+		}
+		if ( ! $current ) {
 			$id = azure_kenedy_attachment( $file );
 			if ( $id ) {
 				set_theme_mod( 'azure_' . $mod, $id );
@@ -123,7 +134,7 @@ function azure_kenedy_import() {
 		}
 	}
 
-	update_option( 'azure_kenedy_imported', 2 );
+	update_option( 'azure_kenedy_imported', 3 );
 }
 add_action( 'after_switch_theme', 'azure_kenedy_import', 20 );
 add_action( 'admin_init', 'azure_kenedy_import' );
