@@ -1,6 +1,6 @@
 <?php
 /**
- * Contact form and newsletter sign-up handlers (admin-post.php).
+ * Contact form handler (admin-post.php).
  * Both email the site team; nothing is stored in the database.
  *
  * @package Azure_Isle
@@ -30,7 +30,7 @@ function azure_form_redirect( $key, $status, $anchor ) {
 	if ( ! $back ) {
 		$back = home_url( '/' );
 	}
-	$back = remove_query_arg( array( 'az_contact', 'az_news' ), $back );
+	$back = remove_query_arg( array( 'az_contact' ), $back );
 	wp_safe_redirect( add_query_arg( $key, $status, $back ) . '#' . $anchor );
 	exit;
 }
@@ -73,31 +73,6 @@ function azure_handle_contact() {
 }
 add_action( 'admin_post_nopriv_azure_contact', 'azure_handle_contact' );
 add_action( 'admin_post_azure_contact', 'azure_handle_contact' );
-
-/**
- * Handle the newsletter sign-up when no external form action is set.
- */
-function azure_handle_newsletter() {
-	if ( ! isset( $_POST['azure_news_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['azure_news_nonce'] ) ), 'azure_news' ) ) {
-		azure_form_redirect( 'az_news', 'error', 'newsletter' );
-	}
-	if ( ! empty( $_POST['az_website'] ) ) {
-		azure_form_redirect( 'az_news', 'ok', 'newsletter' );
-	}
-
-	$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-	if ( ! is_email( $email ) || empty( $_POST['az_consent'] ) ) {
-		azure_form_redirect( 'az_news', 'invalid', 'newsletter' );
-	}
-
-	/* translators: %s: site name. */
-	$title = sprintf( __( '[%s] New newsletter sign-up', 'azure-isle' ), get_bloginfo( 'name' ) );
-	$sent  = wp_mail( azure_form_recipient(), $title, $email );
-
-	azure_form_redirect( 'az_news', $sent ? 'ok' : 'error', 'newsletter' );
-}
-add_action( 'admin_post_nopriv_azure_newsletter', 'azure_handle_newsletter' );
-add_action( 'admin_post_azure_newsletter', 'azure_handle_newsletter' );
 
 /**
  * Status notice after a form redirect.

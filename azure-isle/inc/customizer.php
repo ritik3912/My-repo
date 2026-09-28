@@ -36,17 +36,18 @@ function azure_settings() {
 		),
 	);
 
-	$s['newsletter'] = array(
+	$s['cta'] = array(
 		'panel'       => 'site',
-		'title'       => __( 'Newsletter', 'azure-isle' ),
-		'description' => __( 'Shown above the footer on every page. With no form action URL, sign-ups are emailed to the Contact form recipient.', 'azure-isle' ),
+		'title'       => __( 'Call to Action', 'azure-isle' ),
+		'description' => __( 'Shown above the footer on every page. The first button links like the header button; the second to the apartments.', 'azure-isle' ),
 		'fields'      => array(
-			'news_show'    => array( __( 'Show newsletter band', 'azure-isle' ), 'select', 'yes', $yes ),
-			'news_image'   => array( __( 'Background image', 'azure-isle' ), 'image', 0 ),
-			'news_eyebrow' => array( __( 'Small heading', 'azure-isle' ), 'text', __( 'Stay in Touch', 'azure-isle' ) ),
-			'news_title'   => array( __( 'Title', 'azure-isle' ), 'textarea', __( 'Sign up for our newsletter to receive our news, deals and special offers.', 'azure-isle' ) ),
-			'news_consent' => array( __( 'Consent checkbox text', 'azure-isle' ), 'text', __( 'I agree to the Privacy Policy', 'azure-isle' ) ),
-			'news_action'  => array( __( 'Form action URL (Mailchimp etc.; field name "email")', 'azure-isle' ), 'url', '' ),
+			'cta_show'     => array( __( 'Show call to action band', 'azure-isle' ), 'select', 'yes', $yes ),
+			'cta_image'    => array( __( 'Background image', 'azure-isle' ), 'image', 0 ),
+			'cta_eyebrow'  => array( __( 'Small heading', 'azure-isle' ), 'text', __( 'Kenedy Retreat', 'azure-isle' ) ),
+			'cta_title'    => array( __( 'Title', 'azure-isle' ), 'textarea', __( 'All Utilities Are Included', 'azure-isle' ) ),
+			'cta_text'     => array( __( 'Text', 'azure-isle' ), 'textarea', __( 'Fully furnished apartments with full-size appliances, all housewares and linens, expanded cable and internet, housekeeping, and more.', 'azure-isle' ) ),
+			'cta_button'   => array( __( 'First button label (empty hides it)', 'azure-isle' ), 'text', __( 'Contact Us', 'azure-isle' ) ),
+			'cta_button_2' => array( __( 'Second button label (empty hides it)', 'azure-isle' ), 'text', __( 'View Apartments', 'azure-isle' ) ),
 		),
 	);
 

@@ -19,7 +19,7 @@ An elegant, full-width WordPress theme for island resorts, boutique hotels and v
 4. Settings → Reading: choose "A static page" and pick any page as the Homepage (the theme's
    front-page.php renders the resort layout either way).
 5. Appearance → Customize has four panels:
-   - Azure Isle — Site Settings: header phone and button, newsletter band, footer contact details
+   - Azure Isle — Site Settings: header phone and button, call to action band, footer contact details
      and social links.
    - Azure Isle — Front Page: Hero, Welcome, Image Carousel, Video Band, Accommodations,
      Experiences, Guest Reviews, Services.
@@ -44,8 +44,7 @@ sort them. Rooms live at /rooms/ and each has its own page.
 == Forms ==
 
 The Contact form emails the address in Customize → Contact Page → Contact Form (or the site admin
-email). The newsletter form emails sign-ups to the same address, or posts to your own form action
-URL (e.g. Mailchimp) if one is set. Make sure your site can send email (an SMTP plugin is advised).
+email). Make sure your site can send email (an SMTP plugin is advised).
 
 == Sample content ==
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Footer: newsletter band, contact columns, social icons, bottom bar.
+ * Footer: call to action band, contact columns, social icons, bottom bar.
  *
  * @package Azure_Isle
  */
@@ -16,8 +16,8 @@ $azure_addr  = azure_mod( 'address' );
 </main>
 
 <?php
-if ( 'yes' === azure_mod( 'news_show' ) ) {
-	get_template_part( 'template-parts/newsletter' );
+if ( 'yes' === azure_mod( 'cta_show' ) ) {
+	get_template_part( 'template-parts/cta' );
 }
 ?>
 

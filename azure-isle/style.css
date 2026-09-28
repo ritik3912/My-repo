@@ -3,7 +3,7 @@ Theme Name: Azure Isle
 Theme URI: https://example.com/azure-isle
 Author: Ritik
 Author URI: https://example.com
-Description: An elegant, full-width theme for island resorts, boutique hotels and villas. Transparent header over a full-screen hero, a welcome block, image carousel, video band, accommodations slider, experiences, guest reviews, services and a newsletter band, plus About and Contact page templates, all editable from the Customizer.
+Description: An elegant, full-width theme for island resorts, boutique hotels and villas. Transparent header over a full-screen hero, a welcome block, image carousel, video band, accommodations slider, experiences, guest reviews, services and a call to action band, plus About and Contact page templates, all editable from the Customizer.
 Version: 1.1.0
 Requires at least: 6.0
 Tested up to: 6.6
@@ -1215,82 +1215,71 @@ body:not(.has-hero) #main {
   color: var(--az-muted);
 }
 
-/* ---------- Newsletter ---------- */
-.az-newsletter {
+/* ---------- Call to action ---------- */
+.az-cta {
   position: relative;
   isolation: isolate;
-  padding-block: clamp(4.5rem, 9vw, 7rem);
+  padding-block: clamp(5rem, 11vw, 8.5rem);
   color: var(--az-white);
+  text-align: center;
   overflow: hidden;
 }
 
-.az-newsletter-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, 6vw, 6rem);
+.az-cta .az-bg::after {
+  background: linear-gradient(180deg, rgba(15, 18, 16, 0.55) 0%, rgba(15, 18, 16, 0.72) 100%);
+}
+
+.az-cta-inner {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.az-newsletter h2 {
-  max-width: 540px;
-  font-size: clamp(1.7rem, 2.8vw, 2.4rem);
-  line-height: 1.3;
+.az-cta .az-welcome-icon {
+  color: var(--az-gold);
 }
 
-.az-newsletter-row {
+.az-cta .az-title {
+  color: var(--az-white);
+  max-width: 720px;
+}
+
+.az-cta p {
+  max-width: 620px;
+  margin-inline: auto;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.az-cta-actions {
   display: flex;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.25rem;
 }
 
-.az-newsletter-row input {
-  flex: 1;
-  min-width: 0;
-  padding: 1rem 0;
-  border: 0;
-  background: transparent;
+.az-cta-actions .az-btn-line {
   color: var(--az-white);
 }
 
-.az-newsletter-row input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.az-newsletter-row input:focus {
-  outline: none;
-}
-
-.az-newsletter-submit {
+.az-cta .az-cta-address {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0 0 0 1rem;
-  border: 0;
-  background: none;
-  color: var(--az-white);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.az-newsletter-submit svg {
-  width: 16px;
-  height: 16px;
-}
-
-.az-check {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  opacity: 0.85;
-  cursor: pointer;
-}
-
-.az-check input {
-  accent-color: var(--az-gold);
+.az-cta-address svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--az-gold);
 }
 
 .az-notice {
@@ -1993,8 +1982,7 @@ body:not(.has-hero) #main {
   .az-intro-grid,
   .az-story-grid,
   .az-services-grid,
-  .az-contact-grid,
-  .az-newsletter-inner {
+  .az-contact-grid {
     grid-template-columns: 1fr;
   }
 

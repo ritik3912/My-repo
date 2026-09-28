@@ -31,7 +31,7 @@ function azure_kenedy_images() {
 		'loc_3_image'         => 'img-11.jpg',
 		'serv_image_1'        => 'IMG_5520.jpeg',
 		'serv_image_2'        => 'IMG_5722-2.jpeg',
-		'news_image'          => 'IMG_5651.jpeg',
+		'cta_image'           => 'IMG_5651.jpeg',
 		'about_hero_image'    => 'img-5.jpg',
 		'about_intro_image_1' => 'IMG_5530.jpeg',
 		'about_intro_image_2' => 'img-15.jpg',
@@ -89,7 +89,7 @@ function azure_kenedy_attachment( $file ) {
  * Import the photos and assign them, once.
  */
 function azure_kenedy_import() {
-	if ( get_option( 'azure_kenedy_imported' ) || ! current_user_can( 'upload_files' ) ) {
+	if ( (int) get_option( 'azure_kenedy_imported' ) >= 2 || ! current_user_can( 'upload_files' ) ) {
 		return;
 	}
 	if ( function_exists( 'set_time_limit' ) ) {
@@ -123,7 +123,7 @@ function azure_kenedy_import() {
 		}
 	}
 
-	update_option( 'azure_kenedy_imported', 1 );
+	update_option( 'azure_kenedy_imported', 2 );
 }
 add_action( 'after_switch_theme', 'azure_kenedy_import', 20 );
 add_action( 'admin_init', 'azure_kenedy_import' );

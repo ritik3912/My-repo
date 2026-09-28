@@ -1,7 +1,7 @@
 <?php
 /**
  * Front page: hero, welcome, image carousel, video band, accommodations
- * slider, experiences, guest reviews and services. The newsletter band and
+ * slider, experiences, guest reviews and services. The call to action band and
  * footer follow from footer.php. Text and images come from Appearance →
  * Customize → Azure Isle — Front Page; rooms from Rooms.
  *
