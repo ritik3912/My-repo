@@ -4,7 +4,7 @@ Theme URI: https://example.com/azure-isle
 Author: Ritik
 Author URI: https://example.com
 Description: An elegant, full-width theme for island resorts, boutique hotels and villas. Transparent header over a full-screen hero, a welcome block, image carousel, video band, accommodations slider, experiences, guest reviews, services and a call to action band, plus About and Contact page templates, all editable from the Customizer.
-Version: 1.1.0
+Version: 1.2.0
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -415,62 +415,6 @@ body:not(.has-hero) .az-header .az-btn-line {
   align-items: center;
   gap: 1.5rem;
   min-width: 0;
-}
-
-.az-nav ul {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.az-nav li {
-  position: relative;
-}
-
-.az-nav a {
-  display: inline-block;
-  padding: 0.4rem 0;
-  font-size: 0.74rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0 1px;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition: background-size 300ms var(--az-ease);
-}
-
-.az-nav a:hover,
-.az-nav .current-menu-item > a {
-  background-size: 100% 1px;
-}
-
-.az-nav .sub-menu {
-  position: absolute;
-  top: 100%;
-  left: -1.25rem;
-  display: block;
-  min-width: 220px;
-  padding: 0.75rem 1.25rem;
-  background: var(--az-ivory);
-  color: var(--az-ink);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity 250ms, transform 250ms, visibility 250ms;
-}
-
-.az-nav li:hover > .sub-menu,
-.az-nav li:focus-within > .sub-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
 }
 
 .az-menu-toggle {
@@ -896,49 +840,89 @@ body:not(.has-hero) #main {
 }
 
 /* ---------- Gallery page ---------- */
-.az-gallery .gallery {
+.az-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.az-gallery-grid li {
   margin: 0;
 }
 
-.az-gallery .gallery br {
-  display: none;
-}
-
-.az-gallery .gallery-item {
-  margin: 0;
-  width: auto;
-  max-width: none;
-}
-
-.az-gallery .gallery-icon a {
+.az-shot {
   position: relative;
   display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   background: var(--az-deep);
+  color: var(--az-white);
 }
 
-.az-gallery .gallery-icon img {
+.az-shot img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 700ms var(--az-ease), opacity 400ms var(--az-ease);
+  transition: transform 700ms var(--az-ease);
 }
 
-.az-gallery .gallery-icon a:hover img,
-.az-gallery .gallery-icon a:focus-visible img {
-  transform: scale(1.05);
-  opacity: 0.88;
+.az-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 18, 16, 0) 40%, rgba(15, 18, 16, 0.8) 100%);
+  opacity: 0;
+  transition: opacity 400ms var(--az-ease);
 }
 
-.az-gallery .gallery-caption {
-  padding: 0.85rem 0.25rem 0;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--az-muted);
+.az-shot-caption {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  z-index: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms var(--az-ease), transform 400ms var(--az-ease);
+}
+
+.az-shot-zoom {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 400ms var(--az-ease);
+}
+
+.az-shot:hover img,
+.az-shot:focus-visible img {
+  transform: scale(1.06);
+}
+
+.az-shot:hover::after,
+.az-shot:focus-visible::after,
+.az-shot:hover .az-shot-caption,
+.az-shot:focus-visible .az-shot-caption,
+.az-shot:hover .az-shot-zoom,
+.az-shot:focus-visible .az-shot-zoom {
+  opacity: 1;
+  transform: none;
 }
 
 .az-lightbox .az-lightbox-figure {
@@ -976,11 +960,6 @@ body:not(.has-hero) #main {
 
 .az-lightbox .az-arrow-next {
   right: clamp(0.5rem, 2vw, 2rem);
-}
-
-/* Inline header links hide when they would run into the centered logo. */
-.az-header.is-nav-crowded .az-nav {
-  display: none;
 }
 
 /* ---------- Accommodations ---------- */
@@ -2038,19 +2017,14 @@ body:not(.has-hero) #main {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 1280px) {
-  .az-nav {
-    display: none;
-  }
-}
 
 @media (max-width: 1100px) {
   .az-header-phone span {
     display: none;
   }
 
-  .az-gallery .gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .az-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .az-room-slider .az-track {
@@ -2115,8 +2089,9 @@ body:not(.has-hero) #main {
     font-size: 16px;
   }
 
-  .az-gallery .gallery {
-    grid-template-columns: 1fr;
+  .az-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .az-header-cta,

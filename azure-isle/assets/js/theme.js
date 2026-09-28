@@ -13,27 +13,6 @@
 		};
 		onScroll();
 		window.addEventListener( 'scroll', onScroll, { passive: true } );
-
-		// Hide the inline links whenever they would reach the centered logo;
-		// the Menu button still opens the full menu.
-		var nav = header.querySelector( '.az-nav' );
-		var logo = header.querySelector( '.az-logo' );
-		if ( nav && logo ) {
-			var fitNav = function () {
-				header.classList.remove( 'is-nav-crowded' );
-				var items = nav.querySelectorAll( '.az-nav-list > li' );
-				if ( ! items.length || 'none' === window.getComputedStyle( nav ).display ) {
-					return;
-				}
-				var navEnd = items[ items.length - 1 ].getBoundingClientRect().right;
-				header.classList.toggle( 'is-nav-crowded', navEnd + 32 > logo.getBoundingClientRect().left );
-			};
-			fitNav();
-			window.addEventListener( 'resize', fitNav );
-			if ( document.fonts && document.fonts.ready ) {
-				document.fonts.ready.then( fitNav );
-			}
-		}
 	}
 
 	/* ---------- Overlay menu ---------- */
@@ -209,13 +188,11 @@
 	} );
 
 	/* ---------- Gallery viewer ---------- */
-	var galleryLinks = document.querySelectorAll( '[data-az-gallery] .gallery-icon a, [data-az-gallery] .wp-block-image a' );
+	var galleryLinks = document.querySelectorAll( '[data-az-gallery] .az-shot' );
 	if ( galleryLinks.length ) {
 		var shots = Array.prototype.map.call( galleryLinks, function ( link ) {
-			var item = link.closest( '.gallery-item, .wp-block-image' );
-			var cap = item ? item.querySelector( '.gallery-caption, figcaption' ) : null;
 			var img = link.querySelector( 'img' );
-			return { src: link.href, alt: img ? img.alt : '', caption: cap ? cap.textContent.trim() : '' };
+			return { src: link.href, alt: img ? img.alt : '', caption: link.getAttribute( 'data-caption' ) || '' };
 		} );
 		var box = document.createElement( 'div' );
 		box.className = 'az-modal az-lightbox';
