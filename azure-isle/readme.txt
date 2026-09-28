@@ -13,7 +13,8 @@ An elegant, full-width WordPress theme for island resorts, boutique hotels and v
 2. In WordPress go to Appearance → Themes → Add New → Upload Theme, choose the zip, then Activate.
 3. On activation the theme creates the Kenedy Retreat apartments (One-Bedroom Suite, Efficiency
    Suite, Two-Bedroom, Two-Bath Apartment) plus an "Amenities" page (About Page template) and a
-   "Contact Us" page (Contact Page template), unless pages with those templates exist. The Kenedy
+   "Contact Us" page (Contact Page template) and a "Gallery" page (Gallery Page template), unless
+   pages with those templates exist. The Kenedy
    Retreat photos bundled in assets/images/kenedy/ are imported into the Media Library and placed
    in every image slot and as the apartments' Featured Images.
 4. Settings → Reading: choose "A static page" and pick any page as the Homepage (the theme's
@@ -34,6 +35,13 @@ An elegant, full-width WordPress theme for island resorts, boutique hotels and v
 Any page can use "About Page" or "Contact Page" under Page → Template. The page title is used as the
 banner heading; the banner image falls back to the page's Featured Image. Anything typed in the
 page editor is shown after the About introduction, or below the Contact form.
+
+== Gallery ==
+
+The Gallery page shows the photos in its page editor as a grid; clicking one opens a full-screen
+viewer with previous/next arrows (keyboard arrows and Esc work too). To add, remove or reorder
+photos, edit the [gallery] shortcode (or replace it with a Gallery block, linked to the media
+file). Captions come from each image's Caption in the Media Library.
 
 == Rooms ==
 

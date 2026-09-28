@@ -58,7 +58,7 @@ add_action( 'wp_enqueue_scripts', 'azure_assets' );
  * Transparent header only where a full-screen hero sits under it.
  */
 function azure_body_classes( $classes ) {
-	if ( is_front_page() || is_singular( 'azure_room' ) || is_page_template( array( 'template-about.php', 'template-contact.php' ) ) ) {
+	if ( is_front_page() || is_singular( 'azure_room' ) || is_page_template( array( 'template-about.php', 'template-contact.php', 'template-gallery.php' ) ) ) {
 		$classes[] = 'has-hero';
 	}
 	return $classes;
@@ -69,6 +69,9 @@ function azure_excerpt_more() {
 	return '…';
 }
 add_filter( 'excerpt_more', 'azure_excerpt_more' );
+
+// The theme styles [gallery] output itself.
+add_filter( 'use_default_gallery_style', '__return_false' );
 
 if ( ! isset( $content_width ) ) {
 	$content_width = 760;

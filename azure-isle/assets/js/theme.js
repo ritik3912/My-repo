@@ -1,6 +1,6 @@
 /**
  * Azure Isle: header state, overlay menu, scroll reveal, review slider,
- * scroll-snap carousels and the video pop-up.
+ * scroll-snap carousels, the gallery viewer and the video pop-up.
  */
 (function () {
 	'use strict';
@@ -13,6 +13,27 @@
 		};
 		onScroll();
 		window.addEventListener( 'scroll', onScroll, { passive: true } );
+
+		// Hide the inline links whenever they would reach the centered logo;
+		// the Menu button still opens the full menu.
+		var nav = header.querySelector( '.az-nav' );
+		var logo = header.querySelector( '.az-logo' );
+		if ( nav && logo ) {
+			var fitNav = function () {
+				header.classList.remove( 'is-nav-crowded' );
+				var items = nav.querySelectorAll( '.az-nav-list > li' );
+				if ( ! items.length || 'none' === window.getComputedStyle( nav ).display ) {
+					return;
+				}
+				var navEnd = items[ items.length - 1 ].getBoundingClientRect().right;
+				header.classList.toggle( 'is-nav-crowded', navEnd + 32 > logo.getBoundingClientRect().left );
+			};
+			fitNav();
+			window.addEventListener( 'resize', fitNav );
+			if ( document.fonts && document.fonts.ready ) {
+				document.fonts.ready.then( fitNav );
+			}
+		}
 	}
 
 	/* ---------- Overlay menu ---------- */
@@ -186,6 +207,82 @@
 		window.addEventListener( 'resize', buildDots );
 		buildDots();
 	} );
+
+	/* ---------- Gallery viewer ---------- */
+	var galleryLinks = document.querySelectorAll( '[data-az-gallery] .gallery-icon a, [data-az-gallery] .wp-block-image a' );
+	if ( galleryLinks.length ) {
+		var shots = Array.prototype.map.call( galleryLinks, function ( link ) {
+			var item = link.closest( '.gallery-item, .wp-block-image' );
+			var cap = item ? item.querySelector( '.gallery-caption, figcaption' ) : null;
+			var img = link.querySelector( 'img' );
+			return { src: link.href, alt: img ? img.alt : '', caption: cap ? cap.textContent.trim() : '' };
+		} );
+		var box = document.createElement( 'div' );
+		box.className = 'az-modal az-lightbox';
+		box.setAttribute( 'role', 'dialog' );
+		box.setAttribute( 'aria-modal', 'true' );
+		box.setAttribute( 'aria-label', 'Photo viewer' );
+		box.innerHTML = '<button type="button" class="az-menu-close" aria-label="Close">&times;</button>' +
+			'<button type="button" class="az-arrow az-arrow-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+			'<figure class="az-lightbox-figure"><img alt=""><figcaption></figcaption></figure>' +
+			'<button type="button" class="az-arrow az-arrow-next" aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+		document.body.appendChild( box );
+		var boxImg = box.querySelector( 'img' );
+		var boxCap = box.querySelector( 'figcaption' );
+		var boxClose = box.querySelector( '.az-menu-close' );
+		var current = 0;
+		var opener = null;
+
+		var show = function ( i ) {
+			current = ( i + shots.length ) % shots.length;
+			boxImg.src = shots[ current ].src;
+			boxImg.alt = shots[ current ].alt || shots[ current ].caption;
+			boxCap.textContent = shots[ current ].caption;
+			boxCap.hidden = ! shots[ current ].caption;
+		};
+		var closeBox = function () {
+			box.classList.remove( 'is-open' );
+			document.body.style.overflow = '';
+			if ( opener ) {
+				opener.focus();
+			}
+		};
+
+		Array.prototype.forEach.call( galleryLinks, function ( link, i ) {
+			link.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				opener = link;
+				show( i );
+				box.classList.add( 'is-open' );
+				document.body.style.overflow = 'hidden';
+				boxClose.focus();
+			} );
+		} );
+		box.querySelector( '.az-arrow-prev' ).addEventListener( 'click', function () {
+			show( current - 1 );
+		} );
+		box.querySelector( '.az-arrow-next' ).addEventListener( 'click', function () {
+			show( current + 1 );
+		} );
+		boxClose.addEventListener( 'click', closeBox );
+		box.addEventListener( 'click', function ( e ) {
+			if ( e.target === box ) {
+				closeBox();
+			}
+		} );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( ! box.classList.contains( 'is-open' ) ) {
+				return;
+			}
+			if ( 'Escape' === e.key ) {
+				closeBox();
+			} else if ( 'ArrowLeft' === e.key ) {
+				show( current - 1 );
+			} else if ( 'ArrowRight' === e.key ) {
+				show( current + 1 );
+			}
+		} );
+	}
 
 	/* ---------- Video pop-up ---------- */
 	var play = document.querySelector( '[data-az-video]' );

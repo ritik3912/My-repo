@@ -148,6 +148,7 @@ function azure_page_url( $template ) {
 function azure_menu_fallback( $args = array() ) {
 	$links = array(
 		array( home_url( '/' ), __( 'Home', 'azure-isle' ) ),
+		array( azure_page_url( 'template-gallery.php' ), __( 'Gallery', 'azure-isle' ) ),
 		array( get_post_type_archive_link( 'azure_room' ), __( 'Apartments', 'azure-isle' ) ),
 		array( azure_page_url( 'template-about.php' ), __( 'Amenities', 'azure-isle' ) ),
 		array( azure_page_url( 'template-contact.php' ), __( 'Contact Us', 'azure-isle' ) ),

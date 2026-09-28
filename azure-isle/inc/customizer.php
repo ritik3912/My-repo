@@ -300,6 +300,22 @@ function azure_settings() {
 		),
 	);
 
+	/* ---------- Gallery page ---------- */
+
+	$s['gallery_page'] = array(
+		'panel'       => 'gallery',
+		'title'       => __( 'Gallery Page', 'azure-isle' ),
+		'description' => __( 'Used by pages with the "Gallery Page" template. The photos are the Gallery block (or [gallery] shortcode) in the page editor; captions come from each image.', 'azure-isle' ),
+		'fields'      => array(
+			'gallery_hero_image'   => array( __( 'Banner image (empty uses the page’s Featured Image)', 'azure-isle' ), 'image', 0 ),
+			'gallery_hero_eyebrow' => array( __( 'Banner small heading', 'azure-isle' ), 'text', __( 'Kenedy Retreat', 'azure-isle' ) ),
+			'gallery_hero_text'    => array( __( 'Banner subtitle (the title is the page title)', 'azure-isle' ), 'textarea', __( 'The newest and nicest accommodations in Kenedy, Texas', 'azure-isle' ) ),
+			'gallery_eyebrow'      => array( __( 'Small heading', 'azure-isle' ), 'text', __( 'Gallery', 'azure-isle' ) ),
+			'gallery_title'        => array( __( 'Title', 'azure-isle' ), 'textarea', __( 'Explore Our Gallery', 'azure-isle' ) ),
+			'gallery_text'         => array( __( 'Text', 'azure-isle' ), 'textarea', '' ),
+		),
+	);
+
 	/* ---------- Contact page ---------- */
 
 	$s['contact_hero'] = array(
@@ -377,6 +393,7 @@ function azure_customize_register( $wp_customize ) {
 		'site'    => __( 'Azure Isle — Site Settings', 'azure-isle' ),
 		'front'   => __( 'Azure Isle — Front Page', 'azure-isle' ),
 		'about'   => __( 'Azure Isle — About Page', 'azure-isle' ),
+		'gallery' => __( 'Azure Isle — Gallery Page', 'azure-isle' ),
 		'contact' => __( 'Azure Isle — Contact Page', 'azure-isle' ),
 	);
 	$priority = 24;
