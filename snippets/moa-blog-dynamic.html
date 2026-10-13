@@ -1,0 +1,777 @@
+<!--
+  DYNAMIC VERSION: pulls real posts from the WordPress REST API.
+
+  Only works when served FROM movingofamerica.com itself (Elementor HTML
+  widget on /blog/, or a theme template). Uses same-origin REST calls.
+
+  Layout:
+    - 8 category buttons (4 per row) replace the old search/category/sort toolbar.
+      Click a button to show only that category; click it again to show all.
+    - One post grid below the buttons that loads more posts as you scroll
+      (infinite scroll), newest first.
+    - Whole section is 1400px wide.
+
+  REST calls try "/wp-json/..." first and automatically fall back to
+  "/?rest_route=...". Any <style>/<script>/HTML that a plugin or snippet
+  prints into the API response is stripped before the JSON is parsed.
+
+  Categories are matched by SLUG at runtime (hardcoded IDs are only a fallback),
+  and posts filed under subcategories are included automatically.
+
+  Image lookup order per post:
+    1. Embedded featured image (_embed=wp:featuredmedia)
+    2. jetpack_featured_media_url / yoast og_image (if those plugins add them)
+    3. Direct call to /wp/v2/media/{featured_media}
+    4. First <img> found inside the post content (handles lazy-load attributes)
+    5. Category icon placeholder
+
+  Description lookup per post:
+    1. post.excerpt.rendered (WordPress' own auto/manual excerpt), HTML-stripped
+    2. Falls back to a stripped snippet of post.content.rendered
+    3. Clamped visually to 3 lines via CSS
+-->
+<title>Move Blog Categories (Dynamic)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1A2B6B;
+    --navy-deep:#101B47;
+    --accent:#1E469B;
+    --accent-strong:#12377F;
+    --bg:#FFFFFF;
+    --surface:#F5F7FC;
+    --surface-2:#ECF1FA;
+    --border:#DDE4F3;
+    --text:#1C2440;
+    --text-muted:#5B6478;
+    --banner-a:#1A2B6B;
+    --banner-b:#3465C0;
+    --focus:#12377F;
+    --on-accent:#FFFFFF;
+    --wrap-w:1400px;           /* whole blog section width */
+    --banner-h:260px;          /* card image height (desktop) */
+    --banner-h-mobile:220px;   /* card image height (mobile) */
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --navy:#C4D4F7;
+      --navy-deep:#DCE6FB;
+      --accent:#7FA6F5;
+      --accent-strong:#9EBDFF;
+      --bg:#0D1526;
+      --surface:#141E38;
+      --surface-2:#1B2A4C;
+      --border:#2A3A60;
+      --text:#E7ECFB;
+      --text-muted:#98A5C9;
+      --banner-a:#16224A;
+      --banner-b:#2C4E96;
+      --focus:#9EBDFF;
+      --on-accent:#0D1526;
+    }
+  }
+  :root[data-theme="dark"]{
+    --navy:#C4D4F7;
+    --navy-deep:#DCE6FB;
+    --accent:#7FA6F5;
+    --accent-strong:#9EBDFF;
+    --bg:#0D1526;
+    --surface:#141E38;
+    --surface-2:#1B2A4C;
+    --border:#2A3A60;
+    --text:#E7ECFB;
+    --text-muted:#98A5C9;
+    --banner-a:#16224A;
+    --banner-b:#2C4E96;
+    --focus:#9EBDFF;
+    --on-accent:#0D1526;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ width:100%; max-width:var(--wrap-w); margin:0 auto; }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--focus); outline-offset:2px;
+  }
+
+  /* category buttons: 8 buttons, 4 per row */
+  .cat-buttons{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:14px;
+    margin:0 0 40px; padding:0; list-style:none;
+  }
+  @media (max-width:900px){ .cat-buttons{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:420px){ .cat-buttons{ grid-template-columns:1fr; } }
+
+  .cat-btn{
+    width:100%; min-height:64px; display:flex; align-items:center; gap:12px;
+    padding:12px 16px; border:1px solid var(--border); border-radius:12px;
+    background:var(--bg); color:var(--navy); cursor:pointer; text-align:left;
+    font-family:inherit; font-size:14.5px; font-weight:700; line-height:1.3;
+    transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  .cat-btn:hover{ border-color:var(--accent); box-shadow:0 8px 20px -14px rgba(16,27,71,.35); }
+  .cat-btn-icon{
+    flex:0 0 38px; width:38px; height:38px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--surface-2); transition:background-color .15s ease;
+  }
+  .cat-btn-icon svg{
+    width:20px; height:20px; stroke:var(--accent); fill:none;
+    stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;
+  }
+  .cat-btn-label{ flex:1; min-width:0; }
+  .cat-btn-count{ display:block; font-size:12px; font-weight:600; color:var(--text-muted); margin-top:2px; }
+
+  .cat-btn[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+  .cat-btn[aria-pressed="true"] .cat-btn-icon{ background:rgba(255,255,255,.18); }
+  .cat-btn[aria-pressed="true"] .cat-btn-icon svg{ stroke:var(--on-accent); }
+  .cat-btn[aria-pressed="true"] .cat-btn-count{ color:var(--on-accent); opacity:.85; }
+
+  /* feed heading */
+  .feed-head{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding-bottom:16px; border-bottom:1px solid var(--border); margin-bottom:20px;
+  }
+  .feed-head h2{ font-size:18.5px; font-weight:700; color:var(--navy); margin:0; }
+  .post-count{ font-size:12.5px; font-weight:600; color:var(--text-muted); margin-left:8px; }
+  .view-all{
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:6px;
+    color:var(--accent); font-size:13.5px; font-weight:700; text-decoration:none; white-space:nowrap;
+  }
+  .view-all[hidden]{ display:none; }
+  .view-all svg{ width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; }
+  .view-all:hover{ color:var(--accent-strong); }
+
+  /* card grid */
+  .grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+  @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); gap:20px; } }
+  @media (max-width:620px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg);
+    display:flex; flex-direction:column; text-decoration:none; color:inherit;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px -12px rgba(16,27,71,.28);
+    border-color:var(--accent);
+  }
+
+  /* card image area: taller + protected from Elementor's global "img{height:auto}" rules */
+  .wrap .banner{
+    height:var(--banner-h); flex:0 0 auto; position:relative; overflow:hidden;
+    background:
+      radial-gradient(circle at 85% 20%, rgba(255,255,255,.14), transparent 55%),
+      linear-gradient(135deg, var(--banner-a), var(--banner-b));
+    display:flex; align-items:center; justify-content:center;
+  }
+  @media (max-width:620px){ .wrap .banner{ height:var(--banner-h-mobile); } }
+
+  .wrap .banner img{
+    position:absolute !important; inset:0; z-index:2;
+    width:100% !important; height:100% !important; max-width:none !important;
+    object-fit:cover; object-position:center; display:block;
+    margin:0; border:0; border-radius:0; box-shadow:none;
+    transition:transform .3s ease;
+  }
+  .wrap .card:hover .banner img{ transform:scale(1.03); }
+  .wrap .banner svg{
+    width:44px; height:44px; stroke:rgba(255,255,255,.75); fill:none;
+    stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; position:relative; z-index:1;
+  }
+  .wrap .banner.has-img svg{ display:none; }
+
+  .card-body{ padding:16px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-cat{ font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--accent); margin:0; }
+  .card-title{ font-size:15px; font-weight:700; color:var(--navy); line-height:1.35; margin:0; }
+  .card:hover .card-title{ color:var(--accent); }
+  .card-desc{
+    font-size:12.5px; font-weight:500; line-height:1.55; color:var(--text-muted); margin:0;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .card-meta{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:2px; }
+  .card-date{ display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); font-weight:500; }
+  .card-date svg{ width:13px; height:13px; stroke:var(--text-muted); fill:none; stroke-width:1.8; }
+  .read-more{ display:inline-flex; align-items:center; gap:4px; color:var(--accent); font-size:12.5px; font-weight:700; white-space:nowrap; }
+  .read-more svg{ width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2.2; }
+
+  .skeleton-card{ border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg); }
+  .wrap .skeleton-card .banner{ background:var(--surface-2); }
+  .skeleton-line{ height:12px; border-radius:6px; background:var(--surface-2); margin:16px 18px; }
+  .skeleton-line.short{ width:60%; }
+
+  .empty-note, .error-note{
+    padding:28px; text-align:center; color:var(--text-muted); font-size:13.5px;
+    border:1px dashed var(--border); border-radius:12px; grid-column:1 / -1;
+  }
+  .error-note{ color:#B23B3B; border-color:#E8B4B4; }
+
+  /* infinite scroll footer */
+  .feed-status{ text-align:center; padding:28px 0 8px; color:var(--text-muted); font-size:13px; font-weight:600; min-height:24px; }
+  .retry-btn{
+    margin-left:8px; padding:8px 14px; border:1px solid var(--border); border-radius:8px;
+    background:var(--bg); color:var(--accent); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .retry-btn:hover{ border-color:var(--accent); }
+  .scroll-sentinel{ height:1px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .cat-btn, .wrap .banner img{ transition:none; }
+    .card:hover, .wrap .card:hover .banner img{ transform:none; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="cat-buttons" id="catButtons" role="group" aria-label="Filter posts by category"></div>
+
+  <div class="feed-head">
+    <h2><span id="feedTitle">Latest Posts</span><span class="post-count" id="feedCount"></span></h2>
+    <a class="view-all" id="viewAll" href="#" hidden>View All
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+
+  <div class="grid" id="postGrid" aria-live="polite"></div>
+  <div class="feed-status" id="feedStatus"></div>
+  <div class="scroll-sentinel" id="scrollSentinel" aria-hidden="true"></div>
+</div>
+
+<script id="page-icons" type="application/json">
+{
+  "building": "<rect x='3' y='10' width='6' height='11'/><rect x='10' y='4' width='6' height='17'/><rect x='17' y='13' width='4' height='8'/>",
+  "briefcase": "<rect x='3' y='8' width='18' height='12' rx='2'/><path d='M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/><line x1='3' y1='13' x2='21' y2='13'/>",
+  "clipboard": "<rect x='6' y='4' width='12' height='17' rx='2'/><rect x='9' y='2' width='6' height='4' rx='1'/><path d='M9 13l2 2 4-4'/>",
+  "tag": "<path d='M12 3h6a2 2 0 0 1 2 2v6l-9 9-8-8 9-9z'/><circle cx='16.2' cy='7.8' r='1.4'/>",
+  "layers": "<path d='M12 3l9 5-9 5-9-5 9-5z'/><path d='M3 13l9 5 9-5'/>",
+  "shield": "<path d='M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z'/><path d='M9 12l2 2 4-4'/>",
+  "box": "<path d='M3 8l9-4 9 4-9 4-9-4z'/><path d='M3 8v9l9 4 9-4V8'/><path d='M12 12v9'/>",
+  "bulb": "<path d='M9 18h6'/><path d='M10 21h4'/><path d='M12 3a6 6 0 0 0-3 11.2c.6.4 1 1.1 1 1.8h4c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z'/>"
+}
+</script>
+
+<script>
+(function(){
+  var ICONS = JSON.parse(document.getElementById('page-icons').textContent);
+
+  // Buttons render in this order (4 per row). Each category is matched by slug
+  // (then by name) against /wp/v2/categories at runtime. "id" is only a fallback.
+  var CATEGORIES = [
+    { id: 213, slug: "city-state-moving-guides",   title: "City & State Moving Guides",   icon: "building"  },
+    { id: 233, slug: "commercial-office-moving",   title: "Commercial & Office Moving",   icon: "briefcase" },
+    { id: 212, slug: "move-planning-preparation",  title: "Move Planning & Preparation",  icon: "clipboard" },
+    { id: 219, slug: "moving-cost-pricing",        title: "Moving Cost & Pricing",        icon: "tag"       },
+    { id: 255, slug: "moving-resources",           title: "Moving Resources",             icon: "layers"    },
+    { id: 204, slug: "packing-organization",       title: "Packing & Organization",       icon: "box"       },
+    { id: 254, slug: "moving-services-explained",  title: "Moving Services Explained",    icon: "shield"    },
+    { id: 187, slug: "tips-how-to-guides",         title: "Tips & How-To Guides",         icon: "bulb"      }
+  ];
+
+  var POSTS_PER_PAGE = 9; // posts loaded per infinite-scroll batch (3 full rows)
+  // REST routes (no "/wp-json" prefix; wpFetch adds it and handles the fallback).
+  var API_BASE   = "/wp/v2/posts";
+  var CAT_API    = "/wp/v2/categories?per_page=100&_fields=id,name,slug,parent,count,link";
+  var MEDIA_BASE = "/wp/v2/media/";
+  // Preferred WP image sizes for a ~450px wide card (sharp on retina, not oversized).
+  var SIZE_PREF = ["medium_large", "large", "1536x1536", "full", "medium"];
+  // Description length target (characters) before we trim to a clean word boundary.
+  var DESC_MAX_CHARS = 150;
+  // Start loading the next batch when the bottom of the grid is this close to the viewport.
+  var SCROLL_MARGIN = "600px";
+
+  var CAL_ICON = "<svg viewBox='0 0 24 24'><rect x='3' y='5' width='18' height='16' rx='2'/><line x1='3' y1='10' x2='21' y2='10'/><line x1='8' y1='3' x2='8' y2='7'/><line x1='16' y1='3' x2='16' y2='7'/></svg>";
+  var ARROW_ICON = "<svg viewBox='0 0 24 24'><line x1='5' y1='12' x2='19' y2='12'/><polyline points='12 5 19 12 12 19'/></svg>";
+
+  /* ---------- REST helper ---------- */
+
+  // Fetches a WP REST route and returns a Response-like object ({ headers, json() }).
+  // Tries "/wp-json/<route>" first, then "/?rest_route=<route>".
+  // Tolerates junk that some plugins/snippets print into every response
+  // (e.g. a <style id="..."> block before the JSON).
+  function wpFetch(path){ // e.g. "/wp/v2/posts?per_page=3"
+    function cleanJson(text){
+      var t = text.replace(/^﻿/, '').trim();
+      // Strip leading HTML: whole <style>/<script> blocks, then any stray tags.
+      while (t.charAt(0) === '<'){
+        var block = t.match(/^<(style|script|noscript)\b[\s\S]*?<\/\1\s*>/i);
+        var tag = block || t.match(/^<[^>]*>/);
+        if (!tag) break;
+        t = t.slice(tag[0].length).trim();
+      }
+      try { return JSON.parse(t); } catch (e) {}
+      // Last resort: cut to the outermost JSON array/object.
+      var start = t.search(/[\[{]/);
+      var end = Math.max(t.lastIndexOf(']'), t.lastIndexOf('}'));
+      if (start !== -1 && end > start){
+        try { return JSON.parse(t.slice(start, end + 1)); } catch (e) {}
+      }
+      throw new Error('response is not valid JSON (starts with: ' + text.slice(0, 40).replace(/\s+/g, ' ') + ')');
+    }
+
+    function get(url){
+      return fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .then(function(res){
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.text().then(function(text){
+            var data = cleanJson(text);
+            return {
+              headers: res.headers,
+              json: function(){ return Promise.resolve(data); }
+            };
+          });
+        });
+    }
+
+    var q = path.indexOf('?');
+    var route = q === -1 ? path : path.slice(0, q);
+    var query = q === -1 ? '' : '&' + path.slice(q + 1);
+
+    return get('/wp-json' + path).catch(function(firstErr){
+      return get('/?rest_route=' + route + query).catch(function(){
+        throw firstErr; // report the original problem
+      });
+    });
+  }
+
+  var htmlDecoder = document.createElement('textarea');
+  function decodeHtml(str){
+    htmlDecoder.innerHTML = str || '';
+    return htmlDecoder.value;
+  }
+
+  function fmtDate(iso){
+    var d = new Date(iso);
+    return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  }
+
+  // Strips tags/shortcodes from a WP excerpt or content string and trims it
+  // to a clean word boundary around DESC_MAX_CHARS (roughly 2-3 lines).
+  function plainDescription(html){
+    if (!html) return '';
+    var doc = new DOMParser().parseFromString(html, 'text/html'); // inert, nothing downloads
+    var text = decodeHtml(doc.body.textContent || '')
+      .replace(/\[.*?\]/g, '')   // stray shortcodes, e.g. [...]
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (text.length <= DESC_MAX_CHARS) return text;
+    var cut = text.slice(0, DESC_MAX_CHARS);
+    var lastSpace = cut.lastIndexOf(' ');
+    if (lastSpace > 0) cut = cut.slice(0, lastSpace);
+    return cut.replace(/[.,;:!?-]+$/, '') + '…';
+  }
+
+  function postDescription(post){
+    var fromExcerpt = plainDescription(post.excerpt && post.excerpt.rendered);
+    if (fromExcerpt) return fromExcerpt;
+    return plainDescription(post.content && post.content.rendered);
+  }
+
+  /* ---------- image resolution ---------- */
+
+  function isUsableUrl(u){
+    return typeof u === 'string' && u.length > 0 && u.indexOf('data:') !== 0;
+  }
+
+  // Picks the best URL from a WP media object (embedded or fetched).
+  function pickFromMedia(m){
+    if (!m || m.code) return null; // m.code = REST error (e.g. rest_forbidden)
+    var sizes = m.media_details && m.media_details.sizes;
+    if (sizes){
+      for (var i = 0; i < SIZE_PREF.length; i++){
+        var s = sizes[SIZE_PREF[i]];
+        if (s && isUsableUrl(s.source_url)) return s.source_url;
+      }
+    }
+    return isUsableUrl(m.source_url) ? m.source_url : null;
+  }
+
+  function fromEmbed(post){
+    var list = post._embedded && post._embedded['wp:featuredmedia'];
+    return list && list.length ? pickFromMedia(list[0]) : null;
+  }
+
+  function fromPluginFields(post){
+    if (isUsableUrl(post.jetpack_featured_media_url)) return post.jetpack_featured_media_url;
+    var og = post.yoast_head_json && post.yoast_head_json.og_image;
+    if (og && og[0] && isUsableUrl(og[0].url)) return og[0].url;
+    return null;
+  }
+
+  // First real image in the post body. Checks lazy-load attributes first
+  // (NitroPack, WP Rocket, Elementor, etc.) because "src" is often a placeholder.
+  function fromContent(post){
+    var html = post.content && post.content.rendered;
+    if (!html) return null;
+    var doc = new DOMParser().parseFromString(html, 'text/html'); // inert, nothing downloads
+    var imgs = doc.querySelectorAll('img');
+    var attrs = ['nitro-lazy-src', 'data-lazy-src', 'data-src', 'data-orig-src', 'src'];
+    var srcsets = ['nitro-lazy-srcset', 'data-lazy-srcset', 'data-srcset', 'srcset'];
+
+    for (var i = 0; i < imgs.length; i++){
+      var img = imgs[i];
+      for (var a = 0; a < attrs.length; a++){
+        var v = img.getAttribute(attrs[a]);
+        if (isUsableUrl(v)) return v;
+      }
+      for (var b = 0; b < srcsets.length; b++){
+        var ss = img.getAttribute(srcsets[b]);
+        if (ss){
+          var first = ss.split(',')[0].trim().split(/\s+/)[0];
+          if (isUsableUrl(first)) return first;
+        }
+      }
+    }
+    return null;
+  }
+
+  // Resolves to an image URL or null.
+  function resolveImage(post){
+    var direct = fromEmbed(post) || fromPluginFields(post);
+    if (direct) return Promise.resolve(direct);
+
+    var contentImg = fromContent(post);
+
+    if (post.featured_media){
+      return wpFetch(MEDIA_BASE + post.featured_media + '?_fields=source_url,media_details')
+        .then(function(res){ return res.json(); })
+        .then(function(m){ return pickFromMedia(m) || contentImg; })
+        .catch(function(){ return contentImg; });
+    }
+    return Promise.resolve(contentImg);
+  }
+
+  function setBannerImage(card, url){
+    var banner = card.querySelector('.banner');
+    var img = document.createElement('img');
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onerror = function(){
+      img.remove();
+      banner.classList.remove('has-img'); // fall back to the category icon
+    };
+    img.src = url;
+    banner.appendChild(img);
+    banner.classList.add('has-img');
+  }
+
+  /* ---------- rendering ---------- */
+
+  var buttonsEl  = document.getElementById('catButtons');
+  var grid       = document.getElementById('postGrid');
+  var statusEl   = document.getElementById('feedStatus');
+  var sentinel   = document.getElementById('scrollSentinel');
+  var feedTitle  = document.getElementById('feedTitle');
+  var feedCount  = document.getElementById('feedCount');
+  var viewAll    = document.getElementById('viewAll');
+  var buttons    = {};
+
+  function skeletonCards(){
+    var html = '';
+    for (var i = 0; i < 3; i++){
+      html +=
+        '<div class="skeleton-card" data-skeleton>' +
+          '<div class="banner"></div>' +
+          '<div class="skeleton-line"></div>' +
+          '<div class="skeleton-line short"></div>' +
+        '</div>';
+    }
+    return html;
+  }
+
+  function removeSkeletons(){
+    var sk = grid.querySelectorAll('[data-skeleton]');
+    for (var i = 0; i < sk.length; i++) sk[i].remove();
+  }
+
+  // Which of our 8 categories a post belongs to (for its icon + label).
+  function categoryForPost(post){
+    var ids = post.categories || [];
+    for (var i = 0; i < CATEGORIES.length; i++){
+      var catIds = CATEGORIES[i].ids || [CATEGORIES[i].id];
+      for (var j = 0; j < ids.length; j++){
+        if (catIds.indexOf(ids[j]) !== -1) return CATEGORIES[i];
+      }
+    }
+    return null;
+  }
+
+  function renderCard(post){
+    var cat = state.cat || categoryForPost(post);
+    var title = decodeHtml(post.title.rendered);
+    var desc = postDescription(post);
+    var icon = ICONS[cat ? cat.icon : 'layers'];
+
+    var card = document.createElement('a');
+    card.className = 'card';
+    card.href = post.link;
+    card.innerHTML =
+      '<div class="banner"><svg viewBox="0 0 24 24">' + icon + '</svg></div>' +
+      '<div class="card-body">' +
+        (cat ? '<p class="card-cat"></p>' : '') +
+        '<p class="card-title"></p>' +
+        (desc ? '<p class="card-desc"></p>' : '') +
+        '<div class="card-meta">' +
+          '<span class="card-date">' + CAL_ICON + fmtDate(post.date) + '</span>' +
+          '<span class="read-more">Read More ' + ARROW_ICON + '</span>' +
+        '</div>' +
+      '</div>';
+    if (cat) card.querySelector('.card-cat').textContent = cat.title;
+    card.querySelector('.card-title').textContent = title;
+    if (desc) card.querySelector('.card-desc').textContent = desc;
+
+    resolveImage(post).then(function(url){
+      if (url) setBannerImage(card, url);
+      else console.warn('[MOA blog] No image found for post ' + post.id + ': ' + post.link);
+    });
+
+    return card;
+  }
+
+  // 1. Build the 8 category buttons right away.
+  CATEGORIES.forEach(function(cat){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cat-btn';
+    btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML =
+      '<span class="cat-btn-icon"><svg viewBox="0 0 24 24">' + ICONS[cat.icon] + '</svg></span>' +
+      '<span class="cat-btn-label"><span data-title></span><span class="cat-btn-count" data-count></span></span>';
+    btn.querySelector('[data-title]').textContent = cat.title;
+    btn.addEventListener('click', function(){
+      // Clicking the active category again goes back to "all posts".
+      selectCategory(state.cat === cat ? null : cat);
+    });
+    buttonsEl.appendChild(btn);
+    buttons[cat.slug] = btn;
+  });
+
+  /* ---------- feed state + infinite scroll ---------- */
+
+  var state = {
+    cat: null,        // selected category, or null for all 8
+    page: 0,          // last page loaded
+    totalPages: null, // from X-WP-TotalPages
+    loading: false,
+    done: false,
+    failed: false,
+    seen: {},         // post IDs already rendered (avoids duplicates)
+    token: 0,         // bumps on every reset so stale responses are ignored
+    ready: false      // true once category IDs are resolved
+  };
+
+  function allIds(){
+    var ids = [];
+    CATEGORIES.forEach(function(cat){
+      (cat.ids || [cat.id]).forEach(function(id){
+        if (ids.indexOf(id) === -1) ids.push(id);
+      });
+    });
+    return ids;
+  }
+
+  function selectCategory(cat){
+    state.cat = cat;
+    CATEGORIES.forEach(function(c){
+      buttons[c.slug].setAttribute('aria-pressed', c === cat ? 'true' : 'false');
+    });
+    feedTitle.textContent = cat ? cat.title : 'Latest Posts';
+    viewAll.hidden = !cat;
+    if (cat) viewAll.href = cat.link || ('/blog/category/' + cat.slug + '/');
+    resetFeed();
+  }
+
+  function resetFeed(){
+    state.token++;
+    state.page = 0;
+    state.totalPages = null;
+    state.loading = false;
+    state.done = false;
+    state.failed = false;
+    state.seen = {};
+    grid.innerHTML = '';
+    feedCount.textContent = '';
+    statusEl.textContent = '';
+    loadNextPage();
+  }
+
+  function setStatus(text, withRetry){
+    statusEl.textContent = text;
+    if (withRetry){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'retry-btn';
+      b.textContent = 'Try again';
+      b.addEventListener('click', function(){
+        state.failed = false;
+        loadNextPage();
+      });
+      statusEl.appendChild(b);
+    }
+  }
+
+  function loadNextPage(){
+    if (!state.ready || state.loading || state.done || state.failed) return;
+    state.loading = true;
+    var token = state.token;
+    var page = state.page + 1;
+    var ids = state.cat ? (state.cat.ids || [state.cat.id]) : allIds();
+    var url = API_BASE + '?categories=' + ids.join(',') + '&per_page=' + POSTS_PER_PAGE +
+      '&page=' + page + '&_embed=wp:featuredmedia&orderby=date&order=desc';
+
+    grid.insertAdjacentHTML('beforeend', skeletonCards());
+    setStatus(page > 1 ? 'Loading more posts…' : '');
+
+    wpFetch(url)
+      .then(function(res){
+        var total = res.headers.get('X-WP-Total');
+        var totalPages = parseInt(res.headers.get('X-WP-TotalPages') || '0', 10);
+        return res.json().then(function(posts){ return { posts: posts, total: total, totalPages: totalPages }; });
+      })
+      .then(function(result){
+        if (token !== state.token) return; // category changed meanwhile
+        removeSkeletons();
+        if (!Array.isArray(result.posts)) throw new Error('unexpected API response');
+
+        state.page = page;
+        if (result.totalPages) state.totalPages = result.totalPages;
+        if (result.total) feedCount.textContent = '(' + result.total + ')';
+
+        if (!result.posts.length && page === 1){
+          state.done = true;
+          grid.innerHTML = '<div class="empty-note">New articles for this topic are on the way.</div>';
+          setStatus('');
+          return;
+        }
+
+        result.posts.forEach(function(post){
+          if (state.seen[post.id]) return;
+          state.seen[post.id] = true;
+          grid.appendChild(renderCard(post));
+        });
+
+        if (!result.posts.length || result.posts.length < POSTS_PER_PAGE ||
+            (state.totalPages && page >= state.totalPages)){
+          state.done = true;
+          setStatus(page > 1 ? 'You\'ve reached the end.' : '');
+        } else {
+          setStatus('');
+        }
+      })
+      .catch(function(err){
+        if (token !== state.token) return;
+        removeSkeletons();
+        // WP returns 400 (rest_post_invalid_page_number) when asking past the last page.
+        if (page > 1 && /HTTP 400/.test(err.message)){
+          state.done = true;
+          setStatus('You\'ve reached the end.');
+          return;
+        }
+        state.failed = true;
+        if (page === 1){
+          grid.innerHTML = '<div class="error-note"></div>';
+          // textContent, not innerHTML: error text can contain "<" and would be swallowed as markup.
+          grid.firstChild.textContent =
+            'Couldn\'t load posts (' + err.message + '). ' +
+            'This page must be served from movingofamerica.com and the WordPress REST API must be reachable.';
+          setStatus('', true);
+        } else {
+          setStatus('Couldn\'t load more posts.', true);
+        }
+        console.error('[MOA blog] Failed to load page ' + page + ':', err);
+      })
+      .then(function(){
+        if (token !== state.token) return;
+        state.loading = false;
+        // If the sentinel is still on screen (short page / big monitor), keep filling.
+        if (!state.done && !state.failed && sentinelInView()) loadNextPage();
+      });
+  }
+
+  function sentinelInView(){
+    var r = sentinel.getBoundingClientRect();
+    return r.top < (window.innerHeight || document.documentElement.clientHeight) + parseInt(SCROLL_MARGIN, 10);
+  }
+
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      if (entries[0].isIntersecting) loadNextPage();
+    }, { rootMargin: '0px 0px ' + SCROLL_MARGIN + ' 0px' }).observe(sentinel);
+  } else {
+    window.addEventListener('scroll', function(){ if (sentinelInView()) loadNextPage(); }, { passive: true });
+  }
+
+  /* ---------- resolve real category IDs, then start the feed ---------- */
+
+  function normName(s){
+    return decodeHtml(s).toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  function fetchAllTerms(page, acc){
+    return wpFetch(CAT_API + '&page=' + page).then(function(res){
+      var totalPages = parseInt(res.headers.get('X-WP-TotalPages') || '1', 10);
+      return res.json().then(function(terms){
+        acc = acc.concat(terms);
+        return page < totalPages ? fetchAllTerms(page + 1, acc) : acc;
+      });
+    });
+  }
+
+  function resolveCategories(terms){
+    var bySlug = {}, byName = {}, kids = {}, byId = {};
+    terms.forEach(function(t){
+      bySlug[t.slug] = t;
+      byName[normName(t.name)] = t;
+      byId[t.id] = t;
+      (kids[t.parent] = kids[t.parent] || []).push(t.id);
+    });
+
+    CATEGORIES.forEach(function(cat){
+      var term = bySlug[cat.slug] || byName[normName(cat.title)];
+      if (term){
+        cat.id = term.id;
+        if (term.link) cat.link = term.link;
+      } else {
+        console.warn('[MOA blog] Category "' + cat.title + '" (slug: ' + cat.slug + ') not found in WordPress. Using fallback ID ' + cat.id + '.');
+      }
+
+      // Parent + every descendant, so posts filed under subcategories also show.
+      var ids = [], stack = [cat.id], count = 0;
+      while (stack.length){
+        var id = stack.pop();
+        if (ids.indexOf(id) !== -1) continue;
+        ids.push(id);
+        if (byId[id]) count += byId[id].count || 0;
+        (kids[id] || []).forEach(function(k){ stack.push(k); });
+      }
+      cat.ids = ids;
+
+      // Approximate post count on the button (a post in 2 subcategories counts twice).
+      if (term) buttons[cat.slug].querySelector('[data-count]').textContent =
+        count + (count === 1 ? ' post' : ' posts');
+    });
+  }
+
+  grid.innerHTML = skeletonCards();
+
+  fetchAllTerms(1, [])
+    .then(resolveCategories)
+    .catch(function(err){
+      console.warn('[MOA blog] Could not read categories (' + err.message + '). Using hardcoded IDs.');
+    })
+    .then(function(){
+      grid.innerHTML = '';
+      state.ready = true;
+      selectCategory(null);
+    });
+})();
+</script>
