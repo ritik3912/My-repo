@@ -4,8 +4,6 @@
  * Contact Form 7 shortcode left in place, ready to paste into a WordPress Custom HTML block.
  * Usage: php build-html.php
  */
-function has_post_thumbnail() { return false; }
-function get_the_post_thumbnail_url() { return ''; }
 function esc_url( $u ) { return htmlspecialchars( $u, ENT_QUOTES ); }
 function get_header() {}
 function get_footer() {}

@@ -4,8 +4,6 @@
  * The Contact Form 7 shortcode is replaced by sample fields; on the live site your real "Career" form renders there.
  * Usage: php build-preview.php
  */
-function has_post_thumbnail() { return false; }
-function get_the_post_thumbnail_url() { return ''; }
 function esc_url( $u ) { return htmlspecialchars( $u, ENT_QUOTES ); }
 function get_header() {
 	echo "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Careers | Moving of America (preview)</title>\n<style>body{margin:0}.preview-bar{padding:18px 24px;background:#fff;border-bottom:1px solid #e4e7ee;font:600 14px/1.4 Arial,sans-serif;color:#5a6273;text-align:center}</style>\n</head>\n<body>\n<div class=\"preview-bar\">Your site header appears here</div>\n";

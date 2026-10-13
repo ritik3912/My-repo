@@ -4,12 +4,9 @@
  *
  * Moving of America careers page. Drop this file into the active theme folder,
  * then edit the Careers page and choose "Careers" under Page Attributes → Template.
- * The page's Featured Image (if set) becomes the hero background.
  *
  * Every color and font is a CSS variable at the top of the <style> block.
  */
-
-$moa_hero_img = has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'full' ) : '';
 
 get_header();
 ?>
@@ -92,26 +89,6 @@ get_header();
     box-shadow: 0 8px 20px rgba(0,0,0,.15);
   }
   .moa-careers .photo__badge strong { color: var(--brand-secondary); font-size: 20px; margin-left: 4px; }
-
-  /* ---------- Hero ---------- */
-  .moa-careers .hero {
-    position: relative; min-height: 78vh; display: flex; align-items: center; justify-content: center;
-    padding: 90px 24px 110px; text-align: center; color: #fff;
-    background:
-      linear-gradient(180deg, rgba(8, 28, 58, .55) 0%, rgba(8, 28, 58, .8) 100%),
-      var(--hero-img, linear-gradient(135deg, #081C3A 0%, #23468C 55%, #126CD0 100%)) center / cover no-repeat;
-  }
-  .moa-careers .hero .eyebrow { color: #fff; opacity: .85; }
-  .moa-careers .hero h1 { font-size: clamp(2.3rem, 5.8vw, 3.9rem); font-weight: 800; letter-spacing: -.01em; text-shadow: 0 2px 18px rgba(0,0,0,.25); color: #fff; }
-  .moa-careers .hero__sub { max-width: 600px; margin: 18px auto 0; font-size: 1.1rem; opacity: .92; }
-  .moa-careers .hero__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 32px; }
-  .moa-careers .scroll-cue {
-    position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
-    width: 40px; height: 40px; border: 2px solid #fff; border-radius: 50%;
-    display: grid; place-items: center; color: #fff;
-    animation: moa-bob 2s ease-in-out infinite;
-  }
-  @keyframes moa-bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
 
   /* ---------- Feature rows ---------- */
   .moa-careers .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
@@ -219,7 +196,6 @@ get_header();
   .no-js .moa-careers .reveal { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
     .moa-careers .reveal { opacity: 1; transform: none; transition: none; }
-    .moa-careers .scroll-cue { animation: none; }
   }
 
   /* ---------- Responsive ---------- */
@@ -239,28 +215,11 @@ get_header();
     .moa-careers .job-row { grid-template-columns: auto 1fr; gap: 16px; padding: 20px; }
     .moa-careers .job-row__icon { width: 48px; height: 48px; align-self: start; }
     .moa-careers .job-row__btn { grid-column: 1 / -1; width: 100%; }
-    .moa-careers .hero__ctas .btn { min-width: 0; flex: 1 1 140px; }
     .moa-careers .visit, .moa-careers .form-card { padding: 28px 20px; }
   }
 </style>
 
 <main class="moa-careers" id="careers">
-
-  <!-- ===== Hero ===== -->
-  <section class="hero" <?php if ( $moa_hero_img ) : ?>style="--hero-img: url('<?php echo esc_url( $moa_hero_img ); ?>');"<?php endif; ?>>
-    <div>
-      <span class="eyebrow">Careers at Moving of America</span>
-      <h1>Move Your Career Forward</h1>
-      <p class="hero__sub">We're always looking for new drivers, movers, and foremen to join a fantastic moving team here in New Jersey.</p>
-      <div class="hero__ctas">
-        <a class="btn btn--secondary" href="#apply">Apply now</a>
-        <a class="btn btn--ghost" href="#positions">Open positions</a>
-      </div>
-    </div>
-    <a class="scroll-cue" href="#who" aria-label="Scroll to content">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-    </a>
-  </section>
 
   <!-- ===== Feature rows ===== -->
   <section class="section" id="who">
