@@ -112,29 +112,18 @@
   @media (max-width:420px){ .cat-buttons{ grid-template-columns:1fr; } }
 
   .cat-btn{
-    width:100%; min-height:64px; display:flex; align-items:center; gap:12px;
-    padding:12px 16px; border:1px solid var(--border); border-radius:12px;
-    background:var(--bg); color:var(--navy); cursor:pointer; text-align:left;
+    width:100%; min-height:64px; display:flex; align-items:center;
+    padding:12px 16px; border:1px solid #136cd0; border-radius:12px;
+    background:#136cd0; color:#fff; cursor:pointer; text-align:left;
     font-family:inherit; font-size:14.5px; font-weight:700; line-height:1.3;
     transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
   }
-  .cat-btn:hover{ border-color:var(--accent); box-shadow:0 8px 20px -14px rgba(16,27,71,.35); }
-  .cat-btn-icon{
-    flex:0 0 38px; width:38px; height:38px; border-radius:10px;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--surface-2); transition:background-color .15s ease;
-  }
-  .cat-btn-icon svg{
-    width:20px; height:20px; stroke:var(--accent); fill:none;
-    stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;
-  }
+  /* hover (and the selected category) flip to white with blue border/text */
+  .cat-btn:hover,
+  .cat-btn[aria-pressed="true"]{ background:#fff; border-color:#136cd0; color:#136cd0; }
+  .cat-btn[aria-pressed="true"]{ box-shadow:0 0 0 2px #136cd0 inset; }
   .cat-btn-label{ flex:1; min-width:0; }
-  .cat-btn-count{ display:block; font-size:12px; font-weight:600; color:var(--text-muted); margin-top:2px; }
-
-  .cat-btn[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
-  .cat-btn[aria-pressed="true"] .cat-btn-icon{ background:rgba(255,255,255,.18); }
-  .cat-btn[aria-pressed="true"] .cat-btn-icon svg{ stroke:var(--on-accent); }
-  .cat-btn[aria-pressed="true"] .cat-btn-count{ color:var(--on-accent); opacity:.85; }
+  .cat-btn-count{ display:block; font-size:12px; font-weight:600; color:inherit; opacity:.85; margin-top:2px; }
 
   /* feed heading */
   .feed-head{
@@ -544,7 +533,6 @@
     btn.className = 'cat-btn';
     btn.setAttribute('aria-pressed', 'false');
     btn.innerHTML =
-      '<span class="cat-btn-icon"><svg viewBox="0 0 24 24">' + ICONS[cat.icon] + '</svg></span>' +
       '<span class="cat-btn-label"><span data-title></span><span class="cat-btn-count" data-count></span></span>';
     btn.querySelector('[data-title]').textContent = cat.title;
     btn.addEventListener('click', function(){
