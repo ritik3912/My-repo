@@ -112,9 +112,9 @@
   @media (max-width:420px){ .cat-buttons{ grid-template-columns:1fr; } }
 
   .cat-btn{
-    width:100%; min-height:64px; display:flex; align-items:center;
+    width:100%; min-height:64px; display:flex; align-items:center; justify-content:center;
     padding:12px 16px; border:1px solid #136cd0; border-radius:12px;
-    background:#136cd0; color:#fff; cursor:pointer; text-align:left;
+    background:#136cd0; color:#fff; cursor:pointer; text-align:center;
     font-family:inherit; font-size:14.5px; font-weight:700; line-height:1.3;
     transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
   }
@@ -123,7 +123,6 @@
   .cat-btn[aria-pressed="true"]{ background:#fff; border-color:#136cd0; color:#136cd0; }
   .cat-btn[aria-pressed="true"]{ box-shadow:0 0 0 2px #136cd0 inset; }
   .cat-btn-label{ flex:1; min-width:0; }
-  .cat-btn-count{ display:block; font-size:12px; font-weight:600; color:inherit; opacity:.85; margin-top:2px; }
 
   /* feed heading */
   .feed-head{
@@ -268,7 +267,7 @@
   var POSTS_PER_PAGE = 9; // posts loaded per infinite-scroll batch (3 full rows)
   // REST routes (no "/wp-json" prefix; wpFetch adds it and handles the fallback).
   var API_BASE   = "/wp/v2/posts";
-  var CAT_API    = "/wp/v2/categories?per_page=100&_fields=id,name,slug,parent,count,link";
+  var CAT_API    = "/wp/v2/categories?per_page=100&_fields=id,name,slug,parent,link";
   var MEDIA_BASE = "/wp/v2/media/";
   // Preferred WP image sizes for a ~450px wide card (sharp on retina, not oversized).
   var SIZE_PREF = ["medium_large", "large", "1536x1536", "full", "medium"];
@@ -533,7 +532,7 @@
     btn.className = 'cat-btn';
     btn.setAttribute('aria-pressed', 'false');
     btn.innerHTML =
-      '<span class="cat-btn-label"><span data-title></span><span class="cat-btn-count" data-count></span></span>';
+      '<span class="cat-btn-label" data-title></span>';
     btn.querySelector('[data-title]').textContent = cat.title;
     btn.addEventListener('click', function(){
       // Clicking the active category again goes back to "all posts".
@@ -715,11 +714,10 @@
   }
 
   function resolveCategories(terms){
-    var bySlug = {}, byName = {}, kids = {}, byId = {};
+    var bySlug = {}, byName = {}, kids = {};
     terms.forEach(function(t){
       bySlug[t.slug] = t;
       byName[normName(t.name)] = t;
-      byId[t.id] = t;
       (kids[t.parent] = kids[t.parent] || []).push(t.id);
     });
 
@@ -733,19 +731,15 @@
       }
 
       // Parent + every descendant, so posts filed under subcategories also show.
-      var ids = [], stack = [cat.id], count = 0;
+      var ids = [], stack = [cat.id];
       while (stack.length){
         var id = stack.pop();
         if (ids.indexOf(id) !== -1) continue;
         ids.push(id);
-        if (byId[id]) count += byId[id].count || 0;
         (kids[id] || []).forEach(function(k){ stack.push(k); });
       }
       cat.ids = ids;
 
-      // Approximate post count on the button (a post in 2 subcategories counts twice).
-      if (term) buttons[cat.slug].querySelector('[data-count]').textContent =
-        count + (count === 1 ? ' post' : ' posts');
     });
   }
 
