@@ -250,7 +250,7 @@ get_header();
       </div>
 
       <div class="feature reveal">
-        <div class="feature__media"><div class="photo" role="img" aria-label="Graduates celebrating" style="--img: url('https://movingofamerica.com/wp-content/uploads/2024/10/Students-Graduation-2000-X-1300.jpg');"></div></div>
+        <div class="feature__media"><div class="photo" role="img" aria-label="Preparing a moving budget" style="--img: url('https://movingofamerica.com/wp-content/uploads/2026/09/preparing-a-moving-budget.jpg');"></div></div>
         <div>
           <span class="eyebrow">Training</span>
           <h2>Learn the Ins and Outs of Moving</h2>
