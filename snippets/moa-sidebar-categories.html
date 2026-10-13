@@ -1,0 +1,111 @@
+<!--
+  SIDEBAR CATEGORIES: the same 8 blog categories as the main blog page,
+  shown as stacked buttons. Replaces the default WordPress "Categories" list.
+
+  Paste into an Elementor HTML widget in the post sidebar.
+
+  - Each button links to its category archive. Links work without JavaScript
+    ("/blog/category/<slug>/"); when the WordPress REST API is reachable the
+    real archive links are swapped in automatically.
+  - On a category page, that category's button is shown as selected.
+  - All styles are scoped to .moa-side-cats, so they won't clash with the theme
+    or with the main blog snippet.
+-->
+<style>
+  .moa-side-cats{
+    font-family:'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .moa-side-cats h2{
+    margin:0 0 20px; font-size:36px; font-weight:800; line-height:1.15; color:#2B4488;
+  }
+  .moa-side-cats ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .moa-side-cats li{ margin:0; padding:0; border:0; }
+  .moa-side-cats li::before{ content:none; }
+
+  .moa-side-cats a.moa-cat-btn{
+    box-sizing:border-box; width:100%; min-height:56px;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px 16px; border:1px solid #136cd0; border-radius:12px;
+    background:#136cd0; color:#fff; text-align:center; text-decoration:none;
+    font-size:15px; font-weight:700; line-height:1.3;
+    transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  /* hover (and the current category) flip to white with blue border/text */
+  .moa-side-cats a.moa-cat-btn:hover,
+  .moa-side-cats a.moa-cat-btn[aria-current="page"]{ background:#fff; border-color:#136cd0; color:#136cd0; }
+  .moa-side-cats a.moa-cat-btn[aria-current="page"]{ box-shadow:0 0 0 2px #136cd0 inset; }
+  .moa-side-cats a.moa-cat-btn:focus-visible{ outline:2px solid #12377F; outline-offset:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .moa-side-cats a.moa-cat-btn{ transition:none; }
+  }
+</style>
+
+<nav class="moa-side-cats" aria-label="Blog categories">
+  <h2>Categories</h2>
+  <ul>
+    <li><a class="moa-cat-btn" data-slug="city-state-moving-guides"  href="/blog/category/city-state-moving-guides/">City &amp; State Moving Guides</a></li>
+    <li><a class="moa-cat-btn" data-slug="commercial-office-moving"  href="/blog/category/commercial-office-moving/">Commercial &amp; Office Moving</a></li>
+    <li><a class="moa-cat-btn" data-slug="move-planning-preparation" href="/blog/category/move-planning-preparation/">Move Planning &amp; Preparation</a></li>
+    <li><a class="moa-cat-btn" data-slug="moving-cost-pricing"       href="/blog/category/moving-cost-pricing/">Moving Cost &amp; Pricing</a></li>
+    <li><a class="moa-cat-btn" data-slug="moving-resources"          href="/blog/category/moving-resources/">Moving Resources</a></li>
+    <li><a class="moa-cat-btn" data-slug="packing-organization"      href="/blog/category/packing-organization/">Packing &amp; Organization</a></li>
+    <li><a class="moa-cat-btn" data-slug="moving-services-explained" href="/blog/category/moving-services-explained/">Moving Services Explained</a></li>
+    <li><a class="moa-cat-btn" data-slug="tips-how-to-guides"        href="/blog/category/tips-how-to-guides/">Tips &amp; How-To Guides</a></li>
+  </ul>
+</nav>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('.moa-side-cats a.moa-cat-btn');
+
+  function pathOf(href){
+    try { return new URL(href, location.href).pathname.replace(/\/+$/, '') + '/'; }
+    catch (e) { return href; }
+  }
+
+  function markCurrent(){
+    var here = location.pathname.replace(/\/+$/, '') + '/';
+    for (var i = 0; i < links.length; i++){
+      if (pathOf(links[i].getAttribute('href')) === here) links[i].setAttribute('aria-current', 'page');
+      else links[i].removeAttribute('aria-current');
+    }
+  }
+
+  markCurrent();
+
+  // Swap in the real category archive links from WordPress (permalink base may differ).
+  var slugs = [];
+  for (var i = 0; i < links.length; i++) slugs.push(links[i].getAttribute('data-slug'));
+  var route = '/wp/v2/categories?per_page=100&_fields=slug,link&slug=' + slugs.join(',');
+
+  function get(url){
+    return fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(text){
+        // Some plugins print HTML before the JSON; cut to the JSON array.
+        var start = text.indexOf('['), end = text.lastIndexOf(']');
+        return JSON.parse(text.slice(start, end + 1));
+      });
+  }
+
+  get('/wp-json' + route)
+    .catch(function(){ return get('/?rest_route=' + route.replace('?', '&')); })
+    .then(function(terms){
+      var bySlug = {};
+      terms.forEach(function(t){ if (t.link) bySlug[t.slug] = t.link; });
+      for (var i = 0; i < links.length; i++){
+        var link = bySlug[links[i].getAttribute('data-slug')];
+        if (link) links[i].href = link;
+      }
+      markCurrent();
+    })
+    .catch(function(err){
+      console.warn('[MOA sidebar] Using default category links (' + err.message + ').');
+    });
+})();
+</script>
