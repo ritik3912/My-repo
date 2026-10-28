@@ -8,7 +8,7 @@
     --tl-sub: #ffffff;
     --tl-border: rgba(255, 255, 255, 0.35);
     --tl-arrow: #004540;
-    --tl-speed: 75s;          /* lower = faster */
+    --tl-delay: 3s;           /* time each slide stays before moving to the next */
     display: flex;
     align-items: center;
     gap: 12px;
@@ -26,6 +26,7 @@
     width: max-content;
     will-change: transform;
   }
+  .tl-marquee .tl-marquee__arrow { position: relative; z-index: 5; pointer-events: auto; }
 
   /* !important keeps Elementor / theme button styles from overriding the arrows */
   .tl-marquee .tl-marquee__arrow {
@@ -174,55 +175,77 @@
 </div>
 
 <script>
-  /* Auto-scrolls the cards in a seamless loop; arrows step one card back or forward */
-  document.querySelectorAll('.tl-marquee').forEach(function (root) {
-    var track = root.querySelector('.tl-marquee__track');
-    var originals = Array.from(track.children);
-    originals.forEach(function (item) {
-      var clone = item.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      track.appendChild(clone);
-    });
+  /* Moves one card at a time on a timer; arrows step one card back or forward */
+  (function () {
+    function init(root) {
+      if (root.getAttribute('data-tl-ready')) return;   // never set up the same slider twice
+      root.setAttribute('data-tl-ready', '1');
 
-    var duration = parseFloat(getComputedStyle(root).getPropertyValue('--tl-speed')) || 75;
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var pos = 0, last = null, paused = false, tween = null;
+      var track = root.querySelector('.tl-marquee__track');
+      var originals = Array.from(track.children);
+      var count = originals.length;
+      originals.forEach(function (item) {
+        var clone = item.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      });
 
-    function loopWidth() { return track.scrollWidth / 2; }
-    function cardWidth() { return originals[0].getBoundingClientRect().width; }
+      var delay = (parseFloat(getComputedStyle(root).getPropertyValue('--tl-delay')) || 3) * 1000;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var index = 0, busy = false, paused = false, timer = null;
 
-    function go(dir) {
-      var w = cardWidth();
-      var from = tween ? tween.to : pos;
-      var to = dir > 0 ? (Math.floor(from / w + 0.01) + 1) * w
-                       : (Math.ceil(from / w - 0.01) - 1) * w;
-      tween = { from: pos, to: to, start: performance.now(), ms: 500 };
-    }
+      function cardWidth() { return originals[0].getBoundingClientRect().width; }
 
-    function frame(now) {
-      var dt = last === null ? 0 : Math.min((now - last) / 1000, 0.1);
-      last = now;
-      if (tween) {
-        var p = Math.min((now - tween.start) / tween.ms, 1);
-        pos = tween.from + (tween.to - tween.from) * (1 - Math.pow(1 - p, 3));
-        if (p === 1) tween = null;
-      } else if (!paused && !reduceMotion) {
-        pos += loopWidth() / duration * dt;
+      function setPos(animate) {
+        track.style.transition = animate && !reduceMotion ? 'transform 0.6s ease' : 'none';
+        track.style.transform = 'translateX(' + (-index * cardWidth()) + 'px)';
       }
-      var lw = loopWidth();
-      if (lw && !tween) pos = ((pos % lw) + lw) % lw;
-      var x = lw ? ((pos % lw) + lw) % lw : 0;
-      track.style.transform = 'translateX(' + (-x) + 'px)';
-      requestAnimationFrame(frame);
+
+      function go(dir) {
+        if (busy) return;
+        busy = true;
+        if (dir < 0 && index === 0) {     // jump to the cloned set so we can slide back
+          index = count;
+          setPos(false);
+          track.offsetWidth;
+        }
+        index += dir;
+        setPos(true);
+        setTimeout(function () {
+          if (index >= count) {           // reached the clones, jump back to the real first card
+            index -= count;
+            setPos(false);
+          }
+          busy = false;
+        }, reduceMotion ? 0 : 650);
+      }
+
+      function restart() {
+        clearInterval(timer);
+        if (!reduceMotion) {
+          timer = setInterval(function () { if (!paused) go(1); }, delay);
+        }
+      }
+
+      root.querySelector('.tl-marquee__arrow--prev').addEventListener('click', function (e) {
+        e.preventDefault(); go(-1); restart();
+      });
+      root.querySelector('.tl-marquee__arrow--next').addEventListener('click', function (e) {
+        e.preventDefault(); go(1); restart();
+      });
+      root.addEventListener('mouseenter', function () { paused = true; });
+      root.addEventListener('mouseleave', function () { paused = false; });
+      window.addEventListener('resize', function () { setPos(false); });
+
+      setPos(false);
+      restart();
     }
 
-    root.querySelector('.tl-marquee__arrow--prev').addEventListener('click', function () { go(-1); });
-    root.querySelector('.tl-marquee__arrow--next').addEventListener('click', function () { go(1); });
-    root.addEventListener('mouseenter', function () { paused = true; });
-    root.addEventListener('mouseleave', function () { paused = false; });
-    root.addEventListener('focusin', function () { paused = true; });
-    root.addEventListener('focusout', function () { paused = false; });
-
-    requestAnimationFrame(frame);
-  });
+    function initAll() { document.querySelectorAll('.tl-marquee').forEach(init); }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
+  })();
 </script>
