@@ -1,0 +1,108 @@
+<!-- Partners Grid (4 columns) — paste into an Elementor HTML widget or any page.
+     Shows 4 cards per row on desktop, 2 on tablets, and 1 on phones. -->
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  .tlpg {
+    --tlpg-bg: #004540;
+    --tlpg-text: #ffffff;
+    --tlpg-border: rgba(255, 255, 255, 0.35);
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    font-family: "Jost", "Futura", "Century Gothic", sans-serif;
+  }
+  .tlpg .tlpg__card {
+    min-height: 150px;
+    background: var(--tlpg-bg) !important;
+    border: 1px solid var(--tlpg-border);
+    border-radius: 10px;
+    padding: 24px 22px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .tlpg .tlpg__title {
+    margin: 0 0 12px;
+    color: var(--tlpg-text) !important;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .tlpg .tlpg__sub {
+    margin: 0;
+    color: var(--tlpg-text) !important;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 900px) {
+    .tlpg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .tlpg { grid-template-columns: 1fr; gap: 14px; }
+  }
+</style>
+
+<div class="tlpg" role="list" aria-label="Project partners">
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">G. L. Blackstone &amp; Associates</h3>
+    <p class="tlpg__sub">Downtown Economic Development</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Steetsense</h3>
+    <p class="tlpg__sub">Retail Development Studies</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">BFJ Planning</h3>
+    <p class="tlpg__sub">Data, Mapping, Economic Development</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Starr/Whitehouse Associates</h3>
+    <p class="tlpg__sub">Resilience &amp; Sustainability, Landscape Architecture, Parks</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">NHB Planning Group</h3>
+    <p class="tlpg__sub">Transportation, Environmental Review</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Collective for Community, Culture and Environment</h3>
+    <p class="tlpg__sub">Urban Design, Facilitation, Architecture</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">TYLin Consulting Group</h3>
+    <p class="tlpg__sub">Traffic Engineering and Planning</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Street Places</h3>
+    <p class="tlpg__sub">Tactical Urbanism</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Cleary Associates</h3>
+    <p class="tlpg__sub">Comprehensive Planning</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">WXY Architects and Planners</h3>
+    <p class="tlpg__sub">Urban Design, Urban and Campus Planning, Civic Engagement</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Arcadis</h3>
+    <p class="tlpg__sub">Transportation Planning</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">APS Alumni Planning Solutions</h3>
+    <p class="tlpg__sub">GIS Urban Planning</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Public Works Partners</h3>
+    <p class="tlpg__sub">Strategic Planning &amp; Comprehensive Planning</p>
+  </div>
+  <div class="tlpg__card" role="listitem">
+    <h3 class="tlpg__title">Colliers Engineering</h3>
+    <p class="tlpg__sub">Planning and Engineering</p>
+  </div>
+</div>
