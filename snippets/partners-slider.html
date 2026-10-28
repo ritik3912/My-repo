@@ -1,0 +1,288 @@
+<!-- Partners Slider (4 columns) — paste into an Elementor HTML widget or any page.
+     Moves ONE card at a time, pauses between moves, and the arrows step one card back/forward. -->
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  .tlps {
+    --tlps-bg: #004540;
+    --tlps-text: #ffffff;
+    --tlps-border: rgba(255, 255, 255, 0.35);
+    --tlps-arrow: #004540;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    font-family: "Jost", "Futura", "Century Gothic", sans-serif;
+  }
+  .tlps .tlps__viewport {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  /* animation:none stops any old CSS "marquee" animation from moving the track */
+  .tlps .tlps__track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    animation: none !important;
+    transform: translateX(0);
+    will-change: transform;
+  }
+  .tlps .tlps__item {
+    flex: 0 0 25%;            /* 4 columns visible (JS sets the exact width) */
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .tlps .tlps__card {
+    height: 100%;
+    min-height: 150px;
+    background: var(--tlps-bg) !important;
+    border: 1px solid var(--tlps-border);
+    border-radius: 10px;
+    padding: 24px 22px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .tlps .tlps__title {
+    margin: 0 0 12px;
+    color: var(--tlps-text) !important;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .tlps .tlps__sub {
+    margin: 0;
+    color: var(--tlps-text) !important;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* !important keeps Elementor / theme button styles from overriding the arrows */
+  .tlps .tlps__arrow {
+    position: relative;
+    z-index: 10;
+    flex: 0 0 auto;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    color: var(--tlps-arrow) !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto !important;
+    transition: opacity 0.2s ease;
+  }
+  .tlps .tlps__arrow:hover,
+  .tlps .tlps__arrow:focus {
+    background: #ffffff !important;
+    color: var(--tlps-arrow) !important;
+    opacity: 0.85;
+  }
+  .tlps .tlps__arrow:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+  .tlps .tlps__arrow svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none !important;
+    stroke: var(--tlps-arrow) !important;
+    pointer-events: none;     /* clicks always land on the button, not the icon */
+  }
+
+  @media (max-width: 560px) {
+    .tlps { gap: 8px; }
+    .tlps .tlps__arrow { width: 36px !important; height: 36px !important; }
+  }
+</style>
+
+<!-- data-delay = seconds each slide stays still, data-speed = seconds the slide animation takes -->
+<div class="tlps" role="region" aria-label="Project partners" data-delay="4" data-speed="0.8">
+  <button type="button" class="tlps__arrow tlps__arrow--prev" aria-label="Previous partner">
+    <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  </button>
+  <div class="tlps__viewport">
+    <div class="tlps__track">
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">G. L. Blackstone &amp; Associates</h3>
+        <p class="tlps__sub">Downtown Economic Development</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Steetsense</h3>
+        <p class="tlps__sub">Retail Development Studies</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">BFJ Planning</h3>
+        <p class="tlps__sub">Data, Mapping, Economic Development</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Starr/Whitehouse Associates</h3>
+        <p class="tlps__sub">Resilience &amp; Sustainability, Landscape Architecture, Parks</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">NHB Planning Group</h3>
+        <p class="tlps__sub">Transportation, Environmental Review</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Collective for Community, Culture and Environment</h3>
+        <p class="tlps__sub">Urban Design, Facilitation, Architecture</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">TYLin Consulting Group</h3>
+        <p class="tlps__sub">Traffic Engineering and Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Street Places</h3>
+        <p class="tlps__sub">Tactical Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Cleary Associates</h3>
+        <p class="tlps__sub">Comprehensive Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">WXY Architects and Planners</h3>
+        <p class="tlps__sub">Urban Design, Urban and Campus Planning, Civic Engagement</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Arcadis</h3>
+        <p class="tlps__sub">Transportation Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">APS Alumni Planning Solutions</h3>
+        <p class="tlps__sub">GIS Urban Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Public Works Partners</h3>
+        <p class="tlps__sub">Strategic Planning &amp; Comprehensive Planning</p>
+      </div></div>
+      <div class="tlps__item"><div class="tlps__card">
+        <h3 class="tlps__title">Colliers Engineering</h3>
+        <p class="tlps__sub">Planning and Engineering</p>
+      </div></div>
+    </div>
+  </div>
+  <button type="button" class="tlps__arrow tlps__arrow--next" aria-label="Next partner">
+    <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </button>
+</div>
+
+<script>
+  /* Step slider: shows 4 / 2 / 1 cards, moves exactly one card per step, loops forever */
+  (function () {
+    function init(root) {
+      if (root.getAttribute('data-tlps-ready')) return;   // never set up the same slider twice
+      root.setAttribute('data-tlps-ready', '1');
+
+      var viewport = root.querySelector('.tlps__viewport');
+      var track = root.querySelector('.tlps__track');
+      var items = Array.prototype.slice.call(track.querySelectorAll('.tlps__item'));
+      var count = items.length;
+      var delay = (parseFloat(root.getAttribute('data-delay')) || 4) * 1000;
+      var speed = (parseFloat(root.getAttribute('data-speed')) || 0.8) * 1000;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Clone every card once at the end so the loop can wrap around seamlessly
+      items.forEach(function (item) {
+        var clone = item.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      });
+      var all = track.querySelectorAll('.tlps__item');
+
+      var index = 0, step = 0, busy = false, hovering = false, timer = null;
+
+      function perView() {
+        var w = viewport.clientWidth;
+        return w <= 560 ? 1 : w <= 900 ? 2 : 4;
+      }
+
+      // Size cards in pixels from the viewport width, so every step is exactly one card
+      function layout() {
+        step = viewport.clientWidth / perView();
+        for (var i = 0; i < all.length; i++) {
+          all[i].style.flex = '0 0 ' + step + 'px';
+          all[i].style.width = step + 'px';
+          all[i].style.maxWidth = step + 'px';
+        }
+        track.style.width = (step * all.length) + 'px';
+        move(false);
+      }
+
+      function move(animate) {
+        track.style.setProperty('transition', animate && !reduceMotion ? 'transform ' + speed + 'ms ease-in-out' : 'none', 'important');
+        track.style.setProperty('transform', 'translate3d(' + (-index * step) + 'px,0,0)', 'important');
+      }
+
+      function go(dir) {
+        if (busy) return;
+        busy = true;
+        if (dir < 0 && index === 0) {   // jump to the matching clone first, then slide back
+          index = count;
+          move(false);
+          void track.offsetWidth;       // force the jump to apply before animating
+        }
+        index += dir;
+        move(true);
+        setTimeout(function () {
+          if (index >= count) {         // landed on the clones: jump back to the real card
+            index -= count;
+            move(false);
+          }
+          busy = false;
+        }, reduceMotion ? 0 : speed + 50);
+      }
+
+      function stop() { clearTimeout(timer); timer = null; }
+      function schedule() {
+        stop();
+        if (reduceMotion) return;
+        timer = setTimeout(function () {
+          if (!hovering && !document.hidden) go(1);
+          schedule();
+        }, delay);
+      }
+
+      root.querySelector('.tlps__arrow--prev').addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation(); go(-1); schedule();
+      });
+      root.querySelector('.tlps__arrow--next').addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation(); go(1); schedule();
+      });
+      viewport.addEventListener('mouseenter', function () { hovering = true; });
+      viewport.addEventListener('mouseleave', function () { hovering = false; });
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(layout, 100);
+      });
+
+      layout();
+      schedule();
+    }
+
+    function initAll() { document.querySelectorAll('.tlps').forEach(init); }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
+    window.addEventListener('load', initAll);
+    // Elementor editor / popups render widgets later
+    if (window.jQuery) {
+      window.jQuery(window).on('elementor/frontend/init', function () {
+        if (window.elementorFrontend && elementorFrontend.hooks) {
+          elementorFrontend.hooks.addAction('frontend/element_ready/html.default', initAll);
+        }
+      });
+    }
+  })();
+</script>
