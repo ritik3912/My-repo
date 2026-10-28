@@ -26,34 +26,49 @@
     will-change: transform;
   }
 
-  .tl-marquee__arrow {
+  /* !important keeps Elementor / theme button styles from overriding the arrows */
+  .tl-marquee .tl-marquee__arrow {
     flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: var(--tl-title);
-    color: #ffffff;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid var(--tl-border) !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    color: var(--tl-title) !important;
+    box-shadow: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: opacity 0.2s ease;
   }
-  .tl-marquee__arrow:hover { opacity: 0.85; }
-  .tl-marquee__arrow:focus-visible { outline: 2px solid var(--tl-title); outline-offset: 3px; }
-  .tl-marquee__arrow svg { width: 20px; height: 20px; }
+  .tl-marquee .tl-marquee__arrow:hover,
+  .tl-marquee .tl-marquee__arrow:focus {
+    background: #ffffff !important;
+    color: var(--tl-title) !important;
+    opacity: 0.85;
+  }
+  .tl-marquee .tl-marquee__arrow:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+  .tl-marquee .tl-marquee__arrow svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none !important;
+    stroke: var(--tl-title) !important;
+  }
 
   .tl-marquee__item {
     flex: 0 0 25cqw;          /* 4 columns visible */
     padding: 0 10px;
     box-sizing: border-box;
   }
-  .tl-marquee__card {
+  .tl-marquee .tl-marquee__card {
     height: 100%;
     min-height: 150px;
-    background: var(--tl-bg);
+    background: var(--tl-bg) !important;
     border: 1px solid var(--tl-border);
     border-radius: 10px;
     padding: 24px 22px;
@@ -63,16 +78,16 @@
     justify-content: center;
     text-align: center;
   }
-  .tl-marquee__title {
+  .tl-marquee .tl-marquee__title {
     margin: 0 0 12px;
-    color: var(--tl-title);
+    color: var(--tl-title) !important;
     font-size: 24px;
     font-weight: 500;
     line-height: 1.2;
   }
-  .tl-marquee__sub {
+  .tl-marquee .tl-marquee__sub {
     margin: 0;
-    color: var(--tl-sub);
+    color: var(--tl-sub) !important;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.4;
@@ -84,7 +99,7 @@
 
   @media (max-width: 560px) {
     .tl-marquee { gap: 8px; }
-    .tl-marquee__arrow { width: 36px; height: 36px; }
+    .tl-marquee .tl-marquee__arrow { width: 36px !important; height: 36px !important; }
   }
 </style>
 
