@@ -3,10 +3,11 @@
 
 <style>
   .tl-marquee {
-    --tl-bg: #ffffff;
-    --tl-title: #004540;
-    --tl-sub: #004540;
-    --tl-border: #d5e3e1;
+    --tl-bg: #004540;
+    --tl-title: #ffffff;
+    --tl-sub: #ffffff;
+    --tl-border: rgba(255, 255, 255, 0.35);
+    --tl-arrow: #004540;
     --tl-speed: 75s;          /* lower = faster */
     display: flex;
     align-items: center;
@@ -34,10 +35,10 @@
     min-width: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
-    border: 1px solid var(--tl-border) !important;
+    border: 0 !important;
     border-radius: 50% !important;
     background: #ffffff !important;
-    color: var(--tl-title) !important;
+    color: var(--tl-arrow) !important;
     box-shadow: none !important;
     display: flex;
     align-items: center;
@@ -48,7 +49,7 @@
   .tl-marquee .tl-marquee__arrow:hover,
   .tl-marquee .tl-marquee__arrow:focus {
     background: #ffffff !important;
-    color: var(--tl-title) !important;
+    color: var(--tl-arrow) !important;
     opacity: 0.85;
   }
   .tl-marquee .tl-marquee__arrow:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
@@ -57,7 +58,7 @@
     width: 20px;
     height: 20px;
     fill: none !important;
-    stroke: var(--tl-title) !important;
+    stroke: var(--tl-arrow) !important;
   }
 
   .tl-marquee__item {
