@@ -1,0 +1,140 @@
+<!-- Partners Marquee (4 columns) — paste into an Elementor HTML widget or any page -->
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  .tl-marquee {
+    --tl-bg: #ffffff;
+    --tl-title: #004540;
+    --tl-sub: #004540;
+    --tl-border: #d5e3e1;
+    --tl-speed: 75s;          /* lower = faster */
+    container-type: inline-size;
+    width: 100%;
+    overflow: hidden;
+    font-family: "Jost", "Futura", "Century Gothic", sans-serif;
+  }
+  .tl-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: tl-scroll var(--tl-speed) linear infinite;
+  }
+  .tl-marquee:hover .tl-marquee__track { animation-play-state: paused; }
+
+  .tl-marquee__item {
+    flex: 0 0 25cqw;          /* 4 columns visible */
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .tl-marquee__card {
+    height: 100%;
+    min-height: 150px;
+    background: var(--tl-bg);
+    border: 1px solid var(--tl-border);
+    border-radius: 10px;
+    padding: 24px 22px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .tl-marquee__title {
+    margin: 0 0 12px;
+    color: var(--tl-title);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .tl-marquee__sub {
+    margin: 0;
+    color: var(--tl-sub);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  @keyframes tl-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Tablet: 2 columns / Mobile: 1 column */
+  @container (max-width: 900px) { .tl-marquee__item { flex-basis: 50cqw; } }
+  @container (max-width: 560px) { .tl-marquee__item { flex-basis: 100cqw; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tl-marquee__track { animation: none; }
+  }
+</style>
+
+<div class="tl-marquee" aria-label="Project partners">
+  <div class="tl-marquee__track">
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">G. L. Blackstone &amp; Associates</h3>
+      <p class="tl-marquee__sub">Downtown Economic Development</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Steetsense</h3>
+      <p class="tl-marquee__sub">Retail Development Studies</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">BFJ Planning</h3>
+      <p class="tl-marquee__sub">Data, Mapping, Economic Development</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Starr/Whitehouse Associates</h3>
+      <p class="tl-marquee__sub">Resilience &amp; Sustainability, Landscape Architecture, Parks</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">NHB Planning Group</h3>
+      <p class="tl-marquee__sub">Transportation, Environmental Review</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Collective for Community, Culture and Environment</h3>
+      <p class="tl-marquee__sub">Urban Design, Facilitation, Architecture</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">TYLin Consulting Group</h3>
+      <p class="tl-marquee__sub">Traffic Engineering and Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Street Places</h3>
+      <p class="tl-marquee__sub">Tactical Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Cleary Associates</h3>
+      <p class="tl-marquee__sub">Comprehensive Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">WXY Architects and Planners</h3>
+      <p class="tl-marquee__sub">Urban Design, Urban and Campus Planning, Civic Engagement</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Arcadis</h3>
+      <p class="tl-marquee__sub">Transportation Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">APS Alumni Planning Solutions</h3>
+      <p class="tl-marquee__sub">GIS Urban Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Public Works Partners</h3>
+      <p class="tl-marquee__sub">Strategic Planning &amp; Comprehensive Planning</p>
+    </div></div>
+    <div class="tl-marquee__item"><div class="tl-marquee__card">
+      <h3 class="tl-marquee__title">Colliers Engineering</h3>
+      <p class="tl-marquee__sub">Planning and Engineering</p>
+    </div></div>
+  </div>
+</div>
+
+<script>
+  /* Duplicates the items once for a seamless infinite loop */
+  document.querySelectorAll('.tl-marquee__track').forEach(function (track) {
+    Array.from(track.children).forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  });
+</script>
