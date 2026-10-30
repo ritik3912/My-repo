@@ -1,0 +1,193 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.moa-article { font-family: Montserrat, sans-serif; font-size: 16px; line-height: 1.8; color: #081C3A; max-width: 100%; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; }
+.moa-article * { box-sizing: border-box; }
+.moa-article h1 { line-height: 1.2; font-size: 30px; color: #23468C; }
+.moa-article h2 { line-height: 1.3; font-size: 24px; margin-top: 34px; color: #23468C; scroll-margin-top: 110px; }
+.moa-article h3 { line-height: 1.35; font-size: 19px; margin-top: 24px; color: #23468C; scroll-margin-top: 110px; }
+.moa-article a { color: #23468C; text-decoration: underline; }
+.moa-article a:hover { color: #126CD0; }
+.moa-article ul { padding-left: 22px; }
+.moa-article li { margin-bottom: 8px; }
+.moa-article hr { border: none; border-top: 1px solid #e2e2e2; margin: 26px 0; }
+.moa-tldr { background: #f6f8fa; border-left: 4px solid #23468C; border-radius: 6px; padding: 18px 22px; margin: 22px 0; }
+.moa-tldr p { font-weight: bold; font-size: 17px; margin: 0 0 10px; color: #081C3A; }
+.moa-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
+.moa-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.moa-table th, .moa-table td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 15px; vertical-align: top; }
+.moa-table thead tr { background-color: #f2f2f2; }
+.moa-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+
+/* Rates page additions */
+.moa-rates { max-width: 1200px; margin: 0 auto; }
+.moa-rates-eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #126CD0; }
+.moa-rates h1 { margin: 6px 0 12px; }
+.moa-rates-lead { margin: 0 0 6px; font-size: 17px; }
+.moa-rates-updated { margin: 10px 0 0; font-size: 14px; color: #4a5a72; }
+.moa-rates-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0 8px; }
+.moa-rates-stats div { background: #f6f8fa; border-top: 4px solid #23468C; border-radius: 6px; padding: 14px 18px; }
+.moa-rates-stats strong { display: block; font-size: 26px; line-height: 1.2; font-weight: 800; color: #23468C; }
+.moa-rates-stats span { font-size: 14px; color: #4a5a72; }
+.moa-rates-tools { margin: 0 0 14px; }
+.moa-rates-tools label { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+.moa-rates-tools input { width: 100%; max-width: 380px; font: inherit; font-size: 16px; color: #081C3A; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
+.moa-rates-tools input:focus { outline: 2px solid #126CD0; outline-offset: 1px; border-color: #126CD0; }
+.moa-rates-tools p { margin: 8px 0 0; font-size: 14px; color: #4a5a72; }
+.moa-rates-wrap { max-height: 78vh; overflow: auto; border: 1px solid #ccc; border-radius: 6px; }
+.moa-rates-table { min-width: 940px; border-style: hidden; }
+.moa-rates-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.moa-rates-table thead th { position: sticky; top: 0; z-index: 2; background: #23468C; color: #fff; font-weight: 700; font-size: 14px; line-height: 1.35; border-color: #3a5ba0; vertical-align: bottom; }
+.moa-rates-table thead th span { display: block; font-weight: 500; font-size: 12px; color: #d6e2f5; }
+.moa-rates-table td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.moa-rates-table td.moa-rate-state { font-weight: 600; color: #23468C; }
+.moa-rates-table td.moa-rate-quote { font-style: italic; color: #4a5a72; }
+.moa-rates-table tbody tr:hover { background-color: #eef4fc; }
+.moa-rates-footnote { font-size: 14px; color: #4a5a72; }
+.moa-rates-notes li::marker { color: #126CD0; }
+.moa-bands-table, .moa-factors-table { min-width: 0; }
+.moa-factors-table td:first-child { width: 34%; color: #23468C; }
+.moa-bands-table td strong { color: #23468C; }
+
+@media (max-width: 768px) {
+  .moa-article h1 { font-size: 25px; }
+  .moa-article h2 { font-size: 21px; }
+  .moa-article h3 { font-size: 18px; }
+  .moa-tldr { padding: 15px 16px; }
+  .moa-rates-stats { grid-template-columns: 1fr; }
+  .moa-article a { word-break: break-word; }
+}
+@media (max-width: 600px) {
+  .moa-article h1 { font-size: 22px; }
+  .moa-article h2 { font-size: 19px; }
+  .moa-table, .moa-table thead, .moa-table tbody, .moa-table th, .moa-table td, .moa-table tr { display: block; }
+  .moa-table, .moa-rates-table { min-width: 0; }
+  .moa-table thead { position: absolute; top: -9999px; left: -9999px; }
+  .moa-table tr { margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; background: #fff; }
+  .moa-table td { display: flex; gap: 12px; border: none; border-bottom: 1px solid #eee; padding: 9px 12px; white-space: normal; }
+  .moa-table td:last-child { border-bottom: none; }
+  .moa-table td::before { content: attr(data-label); flex: 0 0 40%; font-weight: bold; font-style: normal; color: #081C3A; }
+  .moa-rates-wrap { max-height: none; overflow: visible; border: none; }
+  .moa-rates-table td.moa-rate-state { background: #23468C; color: #fff; padding-left: 12px; font-size: 16px; }
+  .moa-rates-table td.moa-rate-state::before { content: none; }
+  .moa-factors-table td:first-child { width: auto; }
+}
+</style>
+
+<article class="moa-article moa-rates">
+<p class="moa-rates-eyebrow">Long distance moving rates from New Jersey</p>
+<h1>New Jersey Moving Cost Table</h1>
+<p class="moa-rates-lead">49 destination states. Planning estimates in USD. Mileage rounded up to the next 10 miles.</p>
+<p class="moa-rates-lead">Pricing may vary by moving date. Delivery windows are proposed. <a href="#pricing-notes">See Pricing Notes</a> for all factors.</p>
+<p class="moa-rates-updated">Rates table updated October 13, 2026</p>
+<div class="moa-rates-stats"><div><strong>49</strong><span>destination states</span></div><div><strong>$990</strong><span>minimum move price</span></div><div><strong>3 to 21</strong><span>business day delivery windows</span></div></div>
+<h2 id="nj-moving-cost-table">Moving costs from New Jersey by state</h2>
+<div class="moa-rates-tools"><label for="moa-rate-search">Find your destination state</label><input type="search" id="moa-rate-search" placeholder="Type a state, e.g. Florida" autocomplete="off"><p id="moa-rate-empty" hidden>No matching state. Try another spelling.</p></div>
+<div class="moa-table-wrap moa-rates-wrap"><table class="moa-table moa-rates-table" id="moa-rates-table">
+<caption>New Jersey Moving Cost Table: price ranges in USD and proposed delivery windows by destination state</caption>
+<thead><tr><th scope="col">Destination<span>from NJ</span></th><th scope="col">Approx.<span>miles</span></th><th scope="col">Studio / 1 bedroom<span>Price Range (USD)</span></th><th scope="col">2-3 bedrooms<span>Price Range (USD)</span></th><th scope="col">4+ bedrooms<span>Price Range (USD)</span></th><th scope="col">Proposed delivery<span>Minimum business days</span></th><th scope="col">Proposed delivery<span>Maximum business days</span></th></tr></thead><tbody>
+<tr><td data-label="Destination" class="moa-rate-state">Alabama</td><td data-label="Approx. miles">1,040</td><td data-label="Studio / 1 bedroom">$1,050 to $4,500</td><td data-label="2-3 bedrooms">$2,400 to $5,600</td><td data-label="4+ bedrooms">$3,700 to $7,700</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr class="moa-row-quote"><td data-label="Destination" class="moa-rate-state">Alaska</td><td data-label="Approx. miles" class="moa-rate-quote">Route-specific</td><td data-label="Studio / 1 bedroom" class="moa-rate-quote">Quote required</td><td data-label="2-3 bedrooms" class="moa-rate-quote">Quote required</td><td data-label="4+ bedrooms" class="moa-rate-quote">Quote required</td><td data-label="Min. delivery" class="moa-rate-quote">Confirm with quote</td><td data-label="Max. delivery" class="moa-rate-quote">Confirm with quote</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Arizona</td><td data-label="Approx. miles">2,320</td><td data-label="Studio / 1 bedroom">$1,300 to $5,100</td><td data-label="2-3 bedrooms">$3,300 to $7,350</td><td data-label="4+ bedrooms">$6,200 to $11,400</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Arkansas</td><td data-label="Approx. miles">1,190</td><td data-label="Studio / 1 bedroom">$1,150 to $4,750</td><td data-label="2-3 bedrooms">$2,700 to $6,450</td><td data-label="4+ bedrooms">$4,350 to $8,700</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">California</td><td data-label="Approx. miles">2,890</td><td data-label="Studio / 1 bedroom">$1,250 to $5,550</td><td data-label="2-3 bedrooms">$3,950 to $7,900</td><td data-label="4+ bedrooms">$7,350 to $11,300</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Colorado</td><td data-label="Approx. miles">1,850</td><td data-label="Studio / 1 bedroom">$1,300 to $4,950</td><td data-label="2-3 bedrooms">$3,550 to $7,700</td><td data-label="4+ bedrooms">$6,400 to $11,400</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Connecticut</td><td data-label="Approx. miles">170</td><td data-label="Studio / 1 bedroom">$990 to $2,400</td><td data-label="2-3 bedrooms">$1,200 to $3,300</td><td data-label="4+ bedrooms">$1,600 to $4,500</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Delaware</td><td data-label="Approx. miles">160</td><td data-label="Studio / 1 bedroom">$990 to $2,450</td><td data-label="2-3 bedrooms">$1,200 to $3,500</td><td data-label="4+ bedrooms">$1,550 to $4,200</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Florida</td><td data-label="Approx. miles">1,120</td><td data-label="Studio / 1 bedroom">$1,150 to $4,600</td><td data-label="2-3 bedrooms">$2,350 to $5,650</td><td data-label="4+ bedrooms">$4,050 to $7,700</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Georgia</td><td data-label="Approx. miles">890</td><td data-label="Studio / 1 bedroom">$1,100 to $4,100</td><td data-label="2-3 bedrooms">$2,250 to $5,300</td><td data-label="4+ bedrooms">$3,800 to $7,650</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr class="moa-row-quote"><td data-label="Destination" class="moa-rate-state">Hawaii</td><td data-label="Approx. miles" class="moa-rate-quote">Route-specific</td><td data-label="Studio / 1 bedroom" class="moa-rate-quote">Quote required</td><td data-label="2-3 bedrooms" class="moa-rate-quote">Quote required</td><td data-label="4+ bedrooms" class="moa-rate-quote">Quote required</td><td data-label="Min. delivery" class="moa-rate-quote">Confirm with quote</td><td data-label="Max. delivery" class="moa-rate-quote">Confirm with quote</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Idaho</td><td data-label="Approx. miles">2,500</td><td data-label="Studio / 1 bedroom">$1,200 to $5,000</td><td data-label="2-3 bedrooms">$3,750 to $7,650</td><td data-label="4+ bedrooms">$6,450 to $11,100</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Illinois</td><td data-label="Approx. miles">900</td><td data-label="Studio / 1 bedroom">$1,050 to $4,300</td><td data-label="2-3 bedrooms">$2,250 to $5,700</td><td data-label="4+ bedrooms">$3,650 to $7,650</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Indiana</td><td data-label="Approx. miles">720</td><td data-label="Studio / 1 bedroom">$1,250 to $3,900</td><td data-label="2-3 bedrooms">$2,300 to $6,200</td><td data-label="4+ bedrooms">$4,050 to $8,500</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Iowa</td><td data-label="Approx. miles">1,110</td><td data-label="Studio / 1 bedroom">$1,200 to $4,750</td><td data-label="2-3 bedrooms">$2,450 to $5,850</td><td data-label="4+ bedrooms">$4,050 to $8,150</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Kansas</td><td data-label="Approx. miles">1,410</td><td data-label="Studio / 1 bedroom">$1,250 to $4,750</td><td data-label="2-3 bedrooms">$2,800 to $6,500</td><td data-label="4+ bedrooms">$4,650 to $8,950</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Kentucky</td><td data-label="Approx. miles">680</td><td data-label="Studio / 1 bedroom">$1,150 to $3,750</td><td data-label="2-3 bedrooms">$2,050 to $5,450</td><td data-label="4+ bedrooms">$3,950 to $7,950</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Louisiana</td><td data-label="Approx. miles">1,360</td><td data-label="Studio / 1 bedroom">$1,250 to $4,550</td><td data-label="2-3 bedrooms">$2,800 to $6,250</td><td data-label="4+ bedrooms">$4,800 to $8,900</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Maine</td><td data-label="Approx. miles">520</td><td data-label="Studio / 1 bedroom">$1,000 to $3,100</td><td data-label="2-3 bedrooms">$2,000 to $5,150</td><td data-label="4+ bedrooms">$3,400 to $7,400</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Maryland</td><td data-label="Approx. miles">180</td><td data-label="Studio / 1 bedroom">$990 to $2,350</td><td data-label="2-3 bedrooms">$1,150 to $3,400</td><td data-label="4+ bedrooms">$1,700 to $4,400</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Massachusetts</td><td data-label="Approx. miles">280</td><td data-label="Studio / 1 bedroom">$990 to $2,650</td><td data-label="2-3 bedrooms">$1,400 to $4,400</td><td data-label="4+ bedrooms">$2,150 to $5,750</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Michigan</td><td data-label="Approx. miles">840</td><td data-label="Studio / 1 bedroom">$1,150 to $4,200</td><td data-label="2-3 bedrooms">$2,400 to $5,400</td><td data-label="4+ bedrooms">$4,050 to $7,900</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Minnesota</td><td data-label="Approx. miles">1,390</td><td data-label="Studio / 1 bedroom">$1,200 to $4,700</td><td data-label="2-3 bedrooms">$2,800 to $6,250</td><td data-label="4+ bedrooms">$5,050 to $8,450</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Mississippi</td><td data-label="Approx. miles">1,130</td><td data-label="Studio / 1 bedroom">$1,150 to $4,800</td><td data-label="2-3 bedrooms">$2,700 to $5,850</td><td data-label="4+ bedrooms">$4,450 to $8,200</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Missouri</td><td data-label="Approx. miles">1,050</td><td data-label="Studio / 1 bedroom">$1,100 to $4,450</td><td data-label="2-3 bedrooms">$2,450 to $5,800</td><td data-label="4+ bedrooms">$4,050 to $7,100</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Montana</td><td data-label="Approx. miles">2,140</td><td data-label="Studio / 1 bedroom">$1,250 to $4,800</td><td data-label="2-3 bedrooms">$3,300 to $7,000</td><td data-label="4+ bedrooms">$6,650 to $11,400</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Nebraska</td><td data-label="Approx. miles">1,490</td><td data-label="Studio / 1 bedroom">$1,250 to $5,000</td><td data-label="2-3 bedrooms">$3,000 to $7,500</td><td data-label="4+ bedrooms">$5,750 to $9,500</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Nevada</td><td data-label="Approx. miles">2,580</td><td data-label="Studio / 1 bedroom">$1,200 to $5,050</td><td data-label="2-3 bedrooms">$3,450 to $7,050</td><td data-label="4+ bedrooms">$6,750 to $11,700</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">New Hampshire</td><td data-label="Approx. miles">340</td><td data-label="Studio / 1 bedroom">$990 to $2,800</td><td data-label="2-3 bedrooms">$1,550 to $4,300</td><td data-label="4+ bedrooms">$2,450 to $5,950</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">New Mexico</td><td data-label="Approx. miles">1,890</td><td data-label="Studio / 1 bedroom">$1,200 to $4,750</td><td data-label="2-3 bedrooms">$3,100 to $6,750</td><td data-label="4+ bedrooms">$6,100 to $10,200</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">New York</td><td data-label="Approx. miles">80</td><td data-label="Studio / 1 bedroom">$990 to $2,000</td><td data-label="2-3 bedrooms">$990 to $2,650</td><td data-label="4+ bedrooms">$1,350 to $3,250</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">North Carolina</td><td data-label="Approx. miles">480</td><td data-label="Studio / 1 bedroom">$1,050 to $3,050</td><td data-label="2-3 bedrooms">$1,900 to $4,700</td><td data-label="4+ bedrooms">$3,150 to $7,100</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">North Dakota</td><td data-label="Approx. miles">1,700</td><td data-label="Studio / 1 bedroom">$1,250 to $4,700</td><td data-label="2-3 bedrooms">$3,000 to $7,050</td><td data-label="4+ bedrooms">$5,400 to $9,700</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Ohio</td><td data-label="Approx. miles">560</td><td data-label="Studio / 1 bedroom">$1,100 to $3,150</td><td data-label="2-3 bedrooms">$2,150 to $5,200</td><td data-label="4+ bedrooms">$3,550 to $7,300</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Oklahoma</td><td data-label="Approx. miles">1,460</td><td data-label="Studio / 1 bedroom">$1,150 to $4,550</td><td data-label="2-3 bedrooms">$2,900 to $6,350</td><td data-label="4+ bedrooms">$5,200 to $8,750</td><td data-label="Min. delivery">7 business days</td><td data-label="Max. delivery">14 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Oregon</td><td data-label="Approx. miles">2,760</td><td data-label="Studio / 1 bedroom">$1,350 to $5,250</td><td data-label="2-3 bedrooms">$3,750 to $7,800</td><td data-label="4+ bedrooms">$7,450 to $11,600</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Pennsylvania</td><td data-label="Approx. miles">240</td><td data-label="Studio / 1 bedroom">$990 to $2,550</td><td data-label="2-3 bedrooms">$1,400 to $3,850</td><td data-label="4+ bedrooms">$1,850 to $4,950</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Rhode Island</td><td data-label="Approx. miles">250</td><td data-label="Studio / 1 bedroom">$990 to $2,800</td><td data-label="2-3 bedrooms">$1,350 to $4,050</td><td data-label="4+ bedrooms">$1,900 to $5,050</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">South Carolina</td><td data-label="Approx. miles">700</td><td data-label="Studio / 1 bedroom">$1,100 to $3,450</td><td data-label="2-3 bedrooms">$2,050 to $5,450</td><td data-label="4+ bedrooms">$3,750 to $7,000</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">South Dakota</td><td data-label="Approx. miles">1,560</td><td data-label="Studio / 1 bedroom">$1,200 to $4,650</td><td data-label="2-3 bedrooms">$2,850 to $6,700</td><td data-label="4+ bedrooms">$5,400 to $9,700</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Tennessee</td><td data-label="Approx. miles">900</td><td data-label="Studio / 1 bedroom">$1,100 to $4,300</td><td data-label="2-3 bedrooms">$2,350 to $5,450</td><td data-label="4+ bedrooms">$3,800 to $7,450</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Texas</td><td data-label="Approx. miles">1,750</td><td data-label="Studio / 1 bedroom">$1,250 to $4,650</td><td data-label="2-3 bedrooms">$2,850 to $6,650</td><td data-label="4+ bedrooms">$5,100 to $9,200</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Utah</td><td data-label="Approx. miles">2,200</td><td data-label="Studio / 1 bedroom">$1,300 to $5,650</td><td data-label="2-3 bedrooms">$3,700 to $8,050</td><td data-label="4+ bedrooms">$7,050 to $12,650</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Vermont</td><td data-label="Approx. miles">420</td><td data-label="Studio / 1 bedroom">$1,050 to $2,900</td><td data-label="2-3 bedrooms">$1,750 to $4,700</td><td data-label="4+ bedrooms">$3,100 to $6,600</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Virginia</td><td data-label="Approx. miles">360</td><td data-label="Studio / 1 bedroom">$990 to $2,950</td><td data-label="2-3 bedrooms">$1,650 to $4,600</td><td data-label="4+ bedrooms">$2,550 to $6,050</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Washington</td><td data-label="Approx. miles">2,810</td><td data-label="Studio / 1 bedroom">$1,300 to $5,050</td><td data-label="2-3 bedrooms">$3,650 to $7,550</td><td data-label="4+ bedrooms">$7,250 to $12,100</td><td data-label="Min. delivery">14 business days</td><td data-label="Max. delivery">21 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">West Virginia</td><td data-label="Approx. miles">470</td><td data-label="Studio / 1 bedroom">$1,050 to $2,950</td><td data-label="2-3 bedrooms">$1,750 to $4,500</td><td data-label="4+ bedrooms">$3,100 to $7,300</td><td data-label="Min. delivery">3 business days</td><td data-label="Max. delivery">7 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Wisconsin</td><td data-label="Approx. miles">990</td><td data-label="Studio / 1 bedroom">$1,150 to $4,200</td><td data-label="2-3 bedrooms">$2,400 to $5,900</td><td data-label="4+ bedrooms">$3,750 to $7,150</td><td data-label="Min. delivery">5 business days</td><td data-label="Max. delivery">10 business days</td></tr>
+<tr><td data-label="Destination" class="moa-rate-state">Wyoming</td><td data-label="Approx. miles">1,980</td><td data-label="Studio / 1 bedroom">$1,250 to $5,000</td><td data-label="2-3 bedrooms">$3,250 to $7,450</td><td data-label="4+ bedrooms">$5,800 to $11,050</td><td data-label="Min. delivery">10 business days</td><td data-label="Max. delivery">18 business days</td></tr>
+</tbody></table></div>
+<p class="moa-rates-footnote">Alaska and Hawaii are priced per route, including vehicle or container transportation, so they need a custom quote from your Move Advisor.</p>
+<h2 id="pricing-notes">Pricing Notes</h2>
+<ul class="moa-rates-notes"><li>Prices may vary by moving date, season, demand, availability, inventory, access and services.</li><li>Prices are planning estimates in USD. Minimum $990. Price endpoints rounded to the nearest $50.</li><li>Mileage is an approximate route benchmark, rounded up to the next 10 miles. Actual cities determine distance.</li><li>Delivery bands are proposed business-day windows. Confirm actual timing and charges in the written estimate.</li><li>Binding estimates cover specified goods and services. Review additions or changes with the mover.</li></ul>
+<h3 id="delivery-bands">Proposed delivery bands</h3>
+<p>Delivery windows in the table above come from these mileage bands.</p>
+<div class="moa-table-wrap"><table class="moa-table moa-bands-table"><thead><tr><th scope="col">Mileage band</th><th scope="col">Minimum miles</th><th scope="col">Minimum days</th><th scope="col">Maximum days</th></tr></thead><tbody>
+<tr><td data-label="Mileage band"><strong>0 to 500 miles</strong></td><td data-label="Minimum miles">0</td><td data-label="Minimum days">3</td><td data-label="Maximum days">7</td></tr>
+<tr><td data-label="Mileage band"><strong>501 to 1,000 miles</strong></td><td data-label="Minimum miles">501</td><td data-label="Minimum days">5</td><td data-label="Maximum days">10</td></tr>
+<tr><td data-label="Mileage band"><strong>1,001 to 1,500 miles</strong></td><td data-label="Minimum miles">1,001</td><td data-label="Minimum days">7</td><td data-label="Maximum days">14</td></tr>
+<tr><td data-label="Mileage band"><strong>1,501 to 2,000 miles</strong></td><td data-label="Minimum miles">1,501</td><td data-label="Minimum days">10</td><td data-label="Maximum days">18</td></tr>
+<tr><td data-label="Mileage band"><strong>2,001+ miles</strong></td><td data-label="Minimum miles">2,001</td><td data-label="Minimum days">14</td><td data-label="Maximum days">21</td></tr>
+</tbody></table></div>
+<h3 id="pricing-factors">Pricing factors</h3>
+<div class="moa-table-wrap"><table class="moa-table moa-factors-table"><thead><tr><th scope="col">Pricing factor</th><th scope="col">Short description</th></tr></thead><tbody>
+<tr><td data-label="Pricing factor"><strong>Moving date and availability</strong></td><td data-label="Short description">Season, weekday/weekend, month-end, holidays, and crew/truck availability.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Actual inventory</strong></td><td data-label="Short description">Amount, size, and handling needs of belongings. Bedrooms are a benchmark.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Route and transportation</strong></td><td data-label="Short description">Pickup/delivery addresses, mileage, fuel, and carrier transportation rates.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Labor and move complexity</strong></td><td data-label="Short description">Loading/unloading time, assembly/reassembly, and extra handling.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Packing and unpacking</strong></td><td data-label="Short description">Full/partial packing, unpacking, materials, protective packaging, and crating. (Package Level)</td></tr>
+<tr><td data-label="Pricing factor"><strong>Specialty, bulky, or high-value items</strong></td><td data-label="Short description">Pianos, safes, oversized furniture, and items needing special preparation or care.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Property access</strong></td><td data-label="Short description">Stairs, elevators, long carries, parking, narrow roads/driveways, and shuttles.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Building requirements</strong></td><td data-label="Short description">Permits, required services, and applicable building or COI processing fees.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Additional stops</strong></td><td data-label="Short description">Extra pickup or delivery addresses.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Storage and delivery readiness</strong></td><td data-label="Short description">Storage duration, warehouse handling, transport out, and delayed acceptance.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Third-party services</strong></td><td data-label="Short description">Appliance preparation/disconnect/reconnect, TV mounting, and specialist work.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Delivery service selected</strong></td><td data-label="Short description">Expedited service or guaranteed delivery dates versus a flexible window.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Valuation and protection</strong></td><td data-label="Short description">Selected coverage, declared shipment value, and high-value articles.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Vehicle or special-route transport</strong></td><td data-label="Short description">Car shipping or container transportation for Alaska and Hawaii.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Discounts and promotions</strong></td><td data-label="Short description">Applicable offers, negotiated discounts, and price matching.</td></tr>
+<tr><td data-label="Pricing factor"><strong>Changes to the agreed scope</strong></td><td data-label="Short description">Added items/services or newly identified access requirements.</td></tr>
+</tbody></table></div>
+<div class="moa-tldr"><p>Good to know</p>These factors inform the quote. They are not automatic extra charges. Confirm applicable charges in writing.</div>
+<hr>
+<p>Your Move Advisor can turn these planning estimates into a written estimate based on your actual inventory, pickup and delivery addresses, and moving date. Learn more about our <a href="https://movingofamerica.com/locations/new-jersey-movers/">New Jersey movers</a>.</p>
+<p>Moving of America is fully licensed, insured, and accredited: <a href="https://ai.fmcsa.dot.gov/SMS/Carrier/1601312/CompleteProfile.aspx" target="_blank" rel="noopener external">US DOT 1601312</a>, <a href="https://ai.fmcsa.dot.gov/SMS/Carrier/1601312/CompleteProfile.aspx" target="_blank" rel="noopener external">MC 592337</a>, <a href="https://carcert.dot.ny.gov/CarCert/CarrierInfo.aspx?CarrierID=9704" target="_blank" rel="noopener external">NY DOT 38444</a>, and <a href="https://rgbportal.dca.njoag.gov/publicapplicationsearchpage/?id=f03245f4-917e-f011-b4cc-001dd80821af" target="_blank" rel="noopener external">NJ License 39PC00096600</a>.</p>
+</article>
+<script>
+(function () {
+  var input = document.getElementById('moa-rate-search');
+  var table = document.getElementById('moa-rates-table');
+  var empty = document.getElementById('moa-rate-empty');
+  if (!input || !table) return;
+  var rows = table.tBodies[0].rows;
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase(), shown = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var match = rows[i].cells[0].textContent.toLowerCase().indexOf(q) !== -1;
+      rows[i].style.display = match ? '' : 'none';
+      if (match) shown++;
+    }
+    empty.hidden = shown !== 0;
+  });
+})();
+</script>
+
